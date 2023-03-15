@@ -7,8 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+/*builder.Services.AddDbContext<SolarSystemsDbContext>(opt =>
+    opt.UseInMemoryDatabase("SolarSystems"));*/
 builder.Services.AddDbContext<SolarSystemsDbContext>(opt =>
-    opt.UseInMemoryDatabase("SolarSystems"));
+    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
