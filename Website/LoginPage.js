@@ -12,7 +12,7 @@ function validateLogin(){
 		username: form.username.value,
 		password: form.password.value}))
 	
-	/*
+	
 	
 	//address where requests are sent
 	const loginServer = "";
@@ -34,12 +34,12 @@ function validateLogin(){
 		} else {
 		window.open(
 			//redirect to next site
-          "target.html"
+          "target.html")
 		}
     }) 
     .catch((err) => {
       console.log(err);
     });	
 	
-	*/
+	
 }
