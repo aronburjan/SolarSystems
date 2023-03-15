@@ -5,20 +5,23 @@
         public int Id { get; set; } //row identification (unique)
 
         public int projectNumber { get; set; } //project identification (not unique)
-        public int projectUserId { get; set; }
+        public int UserId { get; set; }
 
-        public int neededComponentId { get; set; }
+        public int ComponentId { get; set; } //needed component Id
 
         public int neededComponentQuantity { get; set; }
 
+        public int availableComponentQuantity { get; set; }
+
         public int status { get; set; }
 
-        public Project(int Id, int projectNumber, int projectUserId, int neededComponentId, int neededComponentQuantity, int status = 0) 
+        public Project(int Id, int projectNumber, int UserId, int ComponentId, int availableComponentQuantity, int neededComponentQuantity, int status = 0) 
         {
             this.Id = Id;
             this.projectNumber = projectNumber;
-            this.projectUserId = projectUserId;
-            this.neededComponentId = neededComponentId;
+            this.UserId = UserId;
+            this.availableComponentQuantity = availableComponentQuantity;
+            this.ComponentId = ComponentId;
             this.neededComponentQuantity = neededComponentQuantity;
             this.status = status;
         }

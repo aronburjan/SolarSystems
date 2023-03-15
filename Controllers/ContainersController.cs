@@ -49,6 +49,25 @@ namespace SolarSystems.Controllers
             return container;
         }
 
+        // GET by row and column and number
+        [HttpGet("containernumber/{containerRow}/{containerColumn}/{containerNumber}")]
+        public async Task<ActionResult<IEnumerable<Container>>> GetContainerNumber(int containerRow, int containerColumn, int containerNumber)
+        {
+            if (_context.Container == null)
+            {
+                return NotFound();
+            }
+            var container = await _context.Container.Where(a => a.containerRow == containerRow
+                                                      && a.containerColumn == containerRow && a.containerNumber == containerNumber).ToListAsync();
+
+            if (container == null)
+            {
+                return NotFound();
+            }
+
+            return container;
+        }
+
         // PUT: api/Containers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
