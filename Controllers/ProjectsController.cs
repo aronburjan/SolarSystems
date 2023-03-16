@@ -24,13 +24,38 @@ namespace SolarSystems.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Project>>> GetProject()
         {
+          if (_context.Project == null)
+          {
+              return NotFound();
+          }
             return await _context.Project.ToListAsync();
+        }
+
+        [HttpGet("projectnumber/{projectnumber}")]
+        public async Task<ActionResult<IEnumerable<Project>>> GetProjectNumber(int projectnumber)
+        {
+            if (_context.Project == null)
+            {
+                return NotFound();
+            }
+            var project = await _context.Project.Where(a => a.projectNumber == projectnumber).ToListAsync();
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            return project;
         }
 
         // GET: api/Projects/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Project>> GetProject(int id)
         {
+          if (_context.Project == null)
+          {
+              return NotFound();
+          }
             var project = await _context.Project.FindAsync(id);
 
             if (project == null)
@@ -77,6 +102,10 @@ namespace SolarSystems.Controllers
         [HttpPost]
         public async Task<ActionResult<Project>> PostProject(Project project)
         {
+          if (_context.Project == null)
+          {
+              return Problem("Entity set 'SolarSystemsDbContext.Project'  is null.");
+          }
             _context.Project.Add(project);
             await _context.SaveChangesAsync();
 
@@ -87,6 +116,10 @@ namespace SolarSystems.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProject(int id)
         {
+            if (_context.Project == null)
+            {
+                return NotFound();
+            }
             var project = await _context.Project.FindAsync(id);
             if (project == null)
             {
@@ -101,7 +134,7 @@ namespace SolarSystems.Controllers
 
         private bool ProjectExists(int id)
         {
-            return _context.Project.Any(e => e.Id == id);
+            return (_context.Project?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

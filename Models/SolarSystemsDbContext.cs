@@ -10,10 +10,12 @@ namespace SolarSystems.Models
         {
         }
 
-        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<User> Users { get; set; }
 
         public DbSet<SolarSystems.Models.Component> Component { get; set; }
 
         public DbSet<SolarSystems.Models.Project> Project { get; set; }
+
+        public DbSet<SolarSystems.Models.Container>? Container { get; set; }
     }
 }
