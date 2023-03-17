@@ -1,5 +1,8 @@
+global using SolarSystems.Services;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 using SolarSystems.Models;
+using SolarSystems.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +14,12 @@ builder.Services.AddControllers();
     opt.UseInMemoryDatabase("SolarSystems"));*/
 builder.Services.AddDbContext<SolarSystemsDbContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+/*builder.Services.AddDbContext<SolarSystemsDbContext>(opt =>
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));*/
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<UserServiceInterface, UserService>();
+
 
 var app = builder.Build();
 
