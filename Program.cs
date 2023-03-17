@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 /*builder.Services.AddDbContext<SolarSystemsDbContext>(opt =>
     opt.UseInMemoryDatabase("SolarSystems"));*/
 builder.Services.AddDbContext<SolarSystemsDbContext>(opt =>
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

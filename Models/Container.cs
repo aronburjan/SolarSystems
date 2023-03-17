@@ -6,7 +6,7 @@
         public int containerRow { get; set; }
         public int containerColumn { get; set; }
         public int containerNumber { get; set; }
-        public int ComponentId { get; set; } //id of component in container
+        
         public int quantityInContainer { get; set; }
 
         public Container(int Id, int containerRow, int containerColumn, int containerNumber, int ComponentId, int quantityInContainer)
@@ -19,6 +19,7 @@
             this.quantityInContainer = quantityInContainer;
         }
 
-        public Container() { }
+        public int ComponentId { get; set; } //id of component in container
+        public Component Component { get; set; }
     }
 }
