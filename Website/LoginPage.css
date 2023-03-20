@@ -3,6 +3,11 @@ body {
   background-color: #f2f2f2;
 }
 
+.errorMessage {
+	color: red;
+	text-align: center;
+}
+
 .centerImage {
   display: block;
   margin-left: auto;
