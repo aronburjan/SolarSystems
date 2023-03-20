@@ -3,6 +3,11 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="ComponentAdder.css">
+<script>
+if (!sessionStorage.getItem('isLoggedIn')) {
+  window.location.href = 'LoginPage.html';
+}
+</script>
 <style>
 </style>
 </head>
