@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SolarSystems.Models;
 
 namespace SolarSystems.Controllers
@@ -49,7 +50,7 @@ namespace SolarSystems.Controllers
                 return NotFound();
             }
             var user = await _context.Users.Where(u => u.Name.Equals(username) && u.Password.Equals(password)).ToListAsync();
-            if (user == null)
+            if (user.IsNullOrEmpty())
             {
                 return NotFound();
             }
