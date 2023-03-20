@@ -41,6 +41,21 @@ namespace SolarSystems.Controllers
             return user;
         }
 
+        [HttpPost("{username}/{password}")]
+        public async Task<ActionResult<IEnumerable<User>>> PostUser(string username, string password)
+        {
+            if (_context.Users == null)
+            {
+                return NotFound();
+            }
+            var user = await _context.Users.Where(u => u.Name.Equals(username) && u.Password.Equals(password)).ToListAsync();
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return user;
+        }
+
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -83,6 +98,8 @@ namespace SolarSystems.Controllers
             //return CreatedAtAction("GetUser", new { id = user.Id }, user);
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
+
+        
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]

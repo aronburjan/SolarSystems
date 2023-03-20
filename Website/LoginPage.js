@@ -15,7 +15,7 @@ function validateLogin(){
 	
 	
 	//address where requests are sent
-	const loginServer = "";
+	const loginServer = "https://localhost:7032/";
 	
 	//send request
 	fetch(loginServer, {
