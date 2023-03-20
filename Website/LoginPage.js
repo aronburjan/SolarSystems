@@ -12,64 +12,36 @@ function validateLogin(){
 		username: form.username.value,
 		password: form.password.value}))
 	
-	/*
-	
+
 	//address where requests are sent
-	const loginServer = "http://localhost:7032/api/Users";
+	const loginServer = "https://localhost:7032/api/Users/" + form.username.value + "/" + form.password.value;
 	
 	//send request
 	fetch(loginServer, {
 		method: "POST",
-		body: JSON.stringify({
+		/*body: JSON.stringify({
 			email: form.username.value,
 			password: form.password.value,
 		}),
+		*/
 	})
     .then(response => {
 		console.log('response.status: ', response.status);
 		console.log(response);
 		if (!response.ok) {
 			console.log('Response not ok');
-			//todo
+			document.getElementById("errorMessage").innerHTML = "ERROR: " + response.status;
 		} else {
+		sessionStorage.setItem('isLoggedIn', true);
 		window.open(
 			//redirect to next site
-          "target.html")
+          "WarehouseManager.html","_self")
 		}
     }) 
     .catch((err) => {
       console.log(err);
     });	
-	
-	*/
-	
-	//TEMP Login
-	
-	//address where requests are sent
-	const loginServer = "https://localhost:7032/api/Users/1";
-	
-	//send request
-	fetch(loginServer, {
-		method: "GET",
-	})
-    .then(response => {
-		console.log('response.status: ', response.status);
-		console.log(response);
-		console.log(response.text());
-		if (!response.ok) {
-			console.log('Response not ok');
-			//todo
-		} else {
-		window.open(
-			//redirect to next site
-          "ComponentAdder.html")
-		}
-    }) 
-    .catch((err) => {
-      console.log(err);
-    });
-	
-	
-	
+
+
 	
 }
