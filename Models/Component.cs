@@ -14,5 +14,7 @@
             this.maxQuantity = maxQuantity;
         }
 
+        public ICollection<Container> Containers { get; set; }
+
     }
 }

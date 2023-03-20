@@ -10,9 +10,15 @@ builder.Services.AddControllers();
 /*builder.Services.AddDbContext<SolarSystemsDbContext>(opt =>
     opt.UseInMemoryDatabase("SolarSystems"));*/
 builder.Services.AddDbContext<SolarSystemsDbContext>(opt =>
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Allow CORS from localhost
+builder.Services.AddCors(p=>p.AddPolicy("corspolicy",build =>
+{
+    build.WithOrigins("http://localhost").AllowAnyMethod().AllowAnyHeader();
+}));
 
 var app = builder.Build();
 
@@ -22,6 +28,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("corspolicy");
 
 app.UseHttpsRedirection();
 
