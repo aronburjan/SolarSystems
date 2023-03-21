@@ -35,7 +35,7 @@ function validateLogin(){
 		sessionStorage.setItem('isLoggedIn', true);
 		window.open(
 			//redirect to next site
-          "WarehouseManager.html","_self")
+          "ComponentManager.html","_self")
 		}
     }) 
     .catch((err) => {
