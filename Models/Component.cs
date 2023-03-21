@@ -2,6 +2,11 @@
 {
     public class Component
     {
+        public Component()
+        {
+            this.Project = new HashSet<Project>();
+        }
+
         public int Id { get; set; }
         public string? componentName { get; set; }
 
@@ -14,7 +19,9 @@
             this.maxQuantity = maxQuantity;
         }
 
-        public ICollection<Container> Containers { get; set; }
+        public virtual ICollection<Container> Containers { get; set; }
+
+        public virtual ICollection<Project> Project { get; set; }
 
     }
 }

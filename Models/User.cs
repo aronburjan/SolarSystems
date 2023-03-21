@@ -11,5 +11,10 @@ namespace SolarSystems.Models
         public int accessLevel { get; set; }
 
         public virtual Project Project { get; set; }
+
+        public static implicit operator User(HashSet<User> v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

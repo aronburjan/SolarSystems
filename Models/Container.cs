@@ -8,18 +8,6 @@
         public int containerNumber { get; set; }
         
         public int quantityInContainer { get; set; }
-
-        public Container(int Id, int containerRow, int containerColumn, int containerNumber, int ComponentId, int quantityInContainer)
-        {
-            this.Id = Id;
-            this.containerRow = containerRow;
-            this.containerColumn = containerColumn;
-            this.containerNumber = containerNumber;
-            this.ComponentId = ComponentId;
-            this.quantityInContainer = quantityInContainer;
-        }
-
-        public int ComponentId { get; set; } //id of component in container
-        public Component Component { get; set; }
+        public virtual Component Component { get; set; }
     }
 }
