@@ -21,10 +21,11 @@ namespace SolarSystems.Models
 
         public int availableComponentQuantity { get; set; }
 
-        public int status { get; set; }
         public virtual User User { get; set; }
 
         public virtual ICollection<Component> Component { get; set; }
+
+        public ICollection<ProjectStatus> ProjectStatuses { get; set; }
 
 
 

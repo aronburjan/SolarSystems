@@ -7,7 +7,7 @@
         public int containerColumn { get; set; }
         public int containerNumber { get; set; }
         
-        public int quantityInContainer { get; set; }
-        public virtual Component Component { get; set; }
+        public int quantityInContainer { get; set; } //component db
+        public virtual Component Component { get; set; } //component id
     }
 }
