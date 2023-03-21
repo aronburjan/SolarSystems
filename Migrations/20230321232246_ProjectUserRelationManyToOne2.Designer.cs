@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SolarSystems.Models;
 
@@ -11,9 +12,11 @@ using SolarSystems.Models;
 namespace SolarSystems.Migrations
 {
     [DbContext(typeof(SolarSystemsDbContext))]
-    partial class SolarSystemsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230321232246_ProjectUserRelationManyToOne2")]
+    partial class ProjectUserRelationManyToOne2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace SolarSystems.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ComponentProject", b =>
+                {
+                    b.Property<int>("ComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ComponentId", "ProjectId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ComponentProject");
+                });
 
             modelBuilder.Entity("SolarSystems.Models.Component", b =>
                 {
@@ -82,9 +100,6 @@ namespace SolarSystems.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ComponentId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
@@ -98,8 +113,6 @@ namespace SolarSystems.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ComponentId");
 
                     b.HasIndex("UserId");
 
@@ -118,7 +131,7 @@ namespace SolarSystems.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProjectId")
+                    b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
                     b.Property<int>("status")
@@ -153,6 +166,21 @@ namespace SolarSystems.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ComponentProject", b =>
+                {
+                    b.HasOne("SolarSystems.Models.Component", null)
+                        .WithMany()
+                        .HasForeignKey("ComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SolarSystems.Models.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SolarSystems.Models.Container", b =>
                 {
                     b.HasOne("SolarSystems.Models.Component", "Component")
@@ -166,10 +194,6 @@ namespace SolarSystems.Migrations
 
             modelBuilder.Entity("SolarSystems.Models.Project", b =>
                 {
-                    b.HasOne("SolarSystems.Models.Component", null)
-                        .WithMany("Projects")
-                        .HasForeignKey("ComponentId");
-
                     b.HasOne("SolarSystems.Models.User", null)
                         .WithMany("Projects")
                         .HasForeignKey("UserId");
@@ -177,16 +201,18 @@ namespace SolarSystems.Migrations
 
             modelBuilder.Entity("SolarSystems.Models.ProjectStatus", b =>
                 {
-                    b.HasOne("SolarSystems.Models.Project", null)
+                    b.HasOne("SolarSystems.Models.Project", "Project")
                         .WithMany("ProjectStatuses")
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("SolarSystems.Models.Component", b =>
                 {
                     b.Navigation("Containers");
-
-                    b.Navigation("Projects");
                 });
 
             modelBuilder.Entity("SolarSystems.Models.Project", b =>

@@ -10,11 +10,6 @@ namespace SolarSystems.Models
         public string? Password { get; set; }
         public int accessLevel { get; set; }
 
-        public virtual Project Project { get; set; }
-
-        public static implicit operator User(HashSet<User> v)
-        {
-            throw new NotImplementedException();
-        }
+        public ICollection<Project> Projects { get; set; }
     }
 }

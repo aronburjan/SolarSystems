@@ -5,13 +5,11 @@ namespace SolarSystems.Models
 {
     public class Project
     {
-        public Project()
+        /*public Project()
         {
             this.Component = new HashSet<Component>();
-        }
+        }*/
 
-        [ForeignKey("User")]
-        public int UserId { get; set; }
         public int Id { get; set; } //row identification (unique)
 
 
@@ -21,10 +19,7 @@ namespace SolarSystems.Models
 
         public int availableComponentQuantity { get; set; }
 
-        public virtual User User { get; set; }
-
-        public virtual ICollection<Component> Component { get; set; }
-
+        //public virtual ICollection<Component> Component { get; set; }
         public ICollection<ProjectStatus> ProjectStatuses { get; set; }
 
 

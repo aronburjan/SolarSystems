@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SolarSystems.Models;
 
@@ -11,9 +12,11 @@ using SolarSystems.Models;
 namespace SolarSystems.Migrations
 {
     [DbContext(typeof(SolarSystemsDbContext))]
-    partial class SolarSystemsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230321232609_ProjectComponentOneToManyRelation")]
+    partial class ProjectComponentOneToManyRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,7 +121,7 @@ namespace SolarSystems.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProjectId")
+                    b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
                     b.Property<int>("status")
@@ -177,9 +180,13 @@ namespace SolarSystems.Migrations
 
             modelBuilder.Entity("SolarSystems.Models.ProjectStatus", b =>
                 {
-                    b.HasOne("SolarSystems.Models.Project", null)
+                    b.HasOne("SolarSystems.Models.Project", "Project")
                         .WithMany("ProjectStatuses")
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("SolarSystems.Models.Component", b =>

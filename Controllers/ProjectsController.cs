@@ -28,7 +28,7 @@ namespace SolarSystems.Controllers
           {
               return NotFound();
           }
-            return await _context.Project.Include(c => c.User).ToListAsync();
+            return await _context.Project.ToListAsync();
         }
 
         [HttpGet("projectnumber/{projectnumber}")]
