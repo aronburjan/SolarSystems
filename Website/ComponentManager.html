@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Component Manager</title>
+	<script src="ComponentManager.js"></script>
+	<link rel="stylesheet" href="ComponentManager.css">
+  </head>
+  <body>
+	<button type="submit" onclick="updateTable()">Refresh</button>
+    <div class="tablediv">
+      <!--Components table-->
+	  
+      <table style="border: 1px solid black;">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Max</th>
+          </tr>
+        </thead>
+        <tbody id="componentTable">
+
+        </tbody>
+      </table>
+      <!--Add mode input menu-->
+      <div class="outerdiv">
+        <div>
+          <label for="modeSwitch">Mode:</label>
+          
+			<label class="switch">
+				<input type="checkbox" id="modeSwitch" onchange="toggleMode()">
+				<span class="slider round"></span>
+			
+			</label>
+			<label for="modeSwitch" id="ModeLabel">Add</label>
+        </div>
+        <form id="componentForm">
+          <!--Add mode input menu-->
+          <div id="addMode">
+            <div>
+              <label for="name-input">Name:</label>
+              <input type="text" id="nameInput" name="name">
+            </div>
+            <div>
+              <label for="price-input">Price:</label>
+              <input type="number" id="priceInput" name="price">
+            </div>
+            <div>
+              <label for="max-input">Max:</label>
+              <input type="number" id="maxInput" name="max">
+            </div>
+            <button type="submit" onclick="addComponent()">Submit</button>
+          </div>
+          <!--Add mode input menu-->
+          <div id="editMode" style="display: none;">
+            <div>
+              <label for="id-input">ID:</label>
+              <input type="text" id="idInput" name="id">
+            </div>
+            <div>
+              <label for="price-input">Price:</label>
+              <input type="number" id="newPriceInput" name="price">
+            </div>
+            <button type="submit" onclick="editComponent()">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+	
+	</body>
+</html>
