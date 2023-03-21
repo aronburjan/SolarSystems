@@ -1,3 +1,31 @@
+.topbar {
+	background-color: white;
+	overflow: hidden;
+}
+		
+.topbar a {
+	float: left;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	font-size: 17px;
+	border-radius: 5px;
+}
+		
+.topbar a:hover {
+	background-color: #557ABE;
+	color: white;
+}
+		
+.topbar-active {
+	background-color: #2B59AE;
+	color: white;
+}
+
+.topbar-active a{
+	color: white;
+}
+
 
 button[type=submit] {
   background-color: #2B59AE;

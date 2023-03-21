@@ -4,8 +4,19 @@
     <title>Component Manager</title>
 	<script src="ComponentManager.js"></script>
 	<link rel="stylesheet" href="ComponentManager.css">
+	<script>
+		if (!sessionStorage.getItem('isLoggedIn')) {
+			window.location.href = 'LoginPage.html';
+		}
+	</script>
   </head>
   <body>
+	<div class="topbar">
+		<!-- <img src="solarsystems.png" alt="SolarSystems Logo" style="width:200px;height:auto;"> -->
+		<a href="ComponentManager.html" class="topbar-active">Component Manager</a>
+		<a href="WarehouseManager.html">Warehouse Manager</a>
+	</div>
+  
 	<button type="submit" onclick="updateTable()">Refresh</button>
     <div class="tablediv">
       <!--Components table-->
