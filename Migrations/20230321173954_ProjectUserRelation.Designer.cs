@@ -11,8 +11,8 @@ using SolarSystems.Models;
 namespace SolarSystems.Migrations
 {
     [DbContext(typeof(SolarSystemsDbContext))]
-    [Migration("20230317153614_ForeignKeyImplement")]
-    partial class ForeignKeyImplement
+    [Migration("20230321173954_ProjectUserRelation")]
+    partial class ProjectUserRelation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -101,16 +101,19 @@ namespace SolarSystems.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("Project");
                 });
 
             modelBuilder.Entity("SolarSystems.Models.User", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -137,9 +140,26 @@ namespace SolarSystems.Migrations
                     b.Navigation("Component");
                 });
 
+            modelBuilder.Entity("SolarSystems.Models.Project", b =>
+                {
+                    b.HasOne("SolarSystems.Models.User", "User")
+                        .WithOne("Project")
+                        .HasForeignKey("SolarSystems.Models.Project", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SolarSystems.Models.Component", b =>
                 {
                     b.Navigation("Containers");
+                });
+
+            modelBuilder.Entity("SolarSystems.Models.User", b =>
+                {
+                    b.Navigation("Project")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
