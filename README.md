@@ -17,19 +17,20 @@ SQL Server Express/SSMS letöltése:
 
 
 Dependencies telepítése:
+
 Visual Studio -> Tools -> NuGet Package Manager -> Manage NuGet Packages For Solution
 
-  Microsoft.EntityFrameworkCore 7.0.4
+    Microsoft.EntityFrameworkCore 7.0.4
   
-  Microsoft.EntityFrameworkCore.Design 7.0.4
+    Microsoft.EntityFrameworkCore.Design 7.0.4
   
-  Microsoft.EntityFrameworkCore.SqlServer 7.0.4
+    Microsoft.EntityFrameworkCore.SqlServer 7.0.4
   
-  Microsoft.EntityFrameworkCore.Tool 6.0.15
+    Microsoft.EntityFrameworkCore.Tool 6.0.15
   
-  Microsoft.VisualStudio.Web.CodeGeneration 6.0.13
+    Microsoft.VisualStudio.Web.CodeGeneration 6.0.13
   
-  Swashbuckle.AspNetCore 6.5.0
+    Swashbuckle.AspNetCore 6.5.0
 
 
 
