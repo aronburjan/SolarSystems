@@ -71,6 +71,7 @@
 	  
 		function updateTable(){
 			let address = "https://localhost:7032/api/Components";
+			let counter = 0;
 			fetch(address, {
 				method: "GET"
 			})
@@ -85,7 +86,7 @@
 				document.getElementById('componentTable').innerHTML = '';
 				data.forEach(item =>{
 					let table = document.getElementById("componentTable");
-					let row = table.insertRow(item.id-1);
+					let row = table.insertRow(counter);
 					let cellID = row.insertCell(0);
 					let cellName = row.insertCell(1);
 					let cellPrice = row.insertCell(2);
@@ -94,6 +95,7 @@
 					cellName.innerHTML = item.componentName;
 					cellPrice.innerHTML = item.price;
 					cellMax.innerHTML = item.maxQuantity;
+					counter++;
 					}); 
 			})
 			.catch((err) => {
