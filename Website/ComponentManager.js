@@ -42,9 +42,11 @@
 			if (!response.ok) {
 				console.log('Response not ok');
 				document.getElementById("errorMessage").innerHTML = "ERROR: " + response.status;
-			} 
+			} else {
+				updateTable();
+			}
 		})
-		//updateTable();
+		
 	}
 
       function editComponent() {
@@ -61,12 +63,13 @@
 			if (!response.ok) {
 				console.log('Response not ok');
 				document.getElementById("errorMessage").innerHTML = "ERROR: " + response.status;
-			} 
+			} else {
+				updateTable();
+			}
 		})
-		//updateTable();
 	  }
 	  
-	 function updateTable(){
+		function updateTable(){
 			let address = "https://localhost:7032/api/Components";
 			fetch(address, {
 				method: "GET"
@@ -74,44 +77,27 @@
 			.then(response => {
 				currentStatus = response.status;
 				console.log('response.status: ', response.status);
-				if (response.ok){
-					//add data to table
-					//TODO: add actual data
-					//console.log(JSON.stringify(response.json));
-					
-				}
+			if (response.ok){
+				return response.json(); 
+			}
 			})
-
-			.catch((err) => {
-				console.log(err);
-			});	
-	}
-	  /*
-	  function addTableRow(currentID){
-		let address = "https://localhost:7032/api/Components/"
-		let currentStatus=0;
-			fetch(address+currentID, {
-				method: "GET",
-			})
-			.then(response => {
-				currentStatus = response.status;
-				console.log('response.status: ', response.status);
-				if (response.ok){
-					//add data to table
+			.then(data => {
+				document.getElementById('componentTable').innerHTML = '';
+				data.forEach(item =>{
 					let table = document.getElementById("componentTable");
-					let row = table.insertRow(currentID);
+					let row = table.insertRow(item.id-1);
 					let cellID = row.insertCell(0);
 					let cellName = row.insertCell(1);
 					let cellPrice = row.insertCell(2);
 					let cellMax = row.insertCell(3);
-					//TODO: add actual data
-					
-					addTableRow(currentID+1);
-				}
+					cellID.innerHTML = item.id;
+					cellName.innerHTML = item.componentName;
+					cellPrice.innerHTML = item.price;
+					cellMax.innerHTML = item.maxQuantity;
+					}); 
 			})
 			.catch((err) => {
 				console.log(err);
 			});	
-			console.log(currentStatus)
-	  }
-	  */
+		}
+	
