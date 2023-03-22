@@ -25,7 +25,7 @@ namespace SolarSystems.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Include(u => u.Projects).ToListAsync();
         }
 
         // GET: api/Users/5

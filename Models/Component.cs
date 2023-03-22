@@ -12,9 +12,9 @@
         public int maxQuantity { get; set; }
 
         public int price { get; set; }
-        public virtual ICollection<Container> Containers { get; set; }
+        public virtual ICollection<Container>? Containers { get; set; }
 
-        public ICollection<Project> Projects { get; set; }
+        public ICollection<Project>? Projects { get; set; }
 
     }
 }

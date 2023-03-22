@@ -10,6 +10,6 @@ namespace SolarSystems.Models
         public string? Password { get; set; }
         public int accessLevel { get; set; }
 
-        public ICollection<Project> Projects { get; set; }
+        public ICollection<Project>? Projects { get; set; }
     }
 }

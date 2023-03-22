@@ -24,6 +24,10 @@ namespace SolarSystems.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Component>>> GetComponent()
         {
+          if (_context.Component == null)
+          {
+              return NotFound();
+          }
             return await _context.Component.ToListAsync();
         }
 
@@ -31,6 +35,10 @@ namespace SolarSystems.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Component>> GetComponent(int id)
         {
+          if (_context.Component == null)
+          {
+              return NotFound();
+          }
             var component = await _context.Component.FindAsync(id);
 
             if (component == null)
@@ -72,11 +80,46 @@ namespace SolarSystems.Controllers
             return NoContent();
         }
 
+        // PUT: api/Components/5/5000
+        [HttpPut("{id}/{price}")]
+        public async Task<IActionResult> PutComponentNewPrice(int id, int price)
+        {
+
+            var component = await _context.Component.FindAsync(id);
+
+            if (component == null)
+            {
+                return NotFound();
+            }
+            component.price = price;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ComponentExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         // POST: api/Components
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Component>> PostComponent(Component component)
         {
+          if (_context.Component == null)
+          {
+              return Problem("Entity set 'SolarSystemsDbContext.Component'  is null.");
+          }
             _context.Component.Add(component);
             await _context.SaveChangesAsync();
 
@@ -87,6 +130,10 @@ namespace SolarSystems.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComponent(int id)
         {
+            if (_context.Component == null)
+            {
+                return NotFound();
+            }
             var component = await _context.Component.FindAsync(id);
             if (component == null)
             {
@@ -101,7 +148,7 @@ namespace SolarSystems.Controllers
 
         private bool ComponentExists(int id)
         {
-            return _context.Component.Any(e => e.Id == id);
+            return (_context.Component?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
