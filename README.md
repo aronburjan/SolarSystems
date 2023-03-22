@@ -7,13 +7,13 @@ random line
 
 Projekt letöltése GitHub-ról:
 
-  Visual Studio -> clone repository -> https://github.com/aronburjan/SolarSystems.git
+    Visual Studio -> clone repository -> https://github.com/aronburjan/SolarSystems.git
 
 SQL Server Express/SSMS letöltése:
 
-  SQL Server Express letöltése: https://www.microsoft.com/en-us/sql-server/sql-server-downloads
+    SQL Server Express letöltése: https://www.microsoft.com/en-us/sql-server/sql-server-downloads
   
-  Microsoft SQL Server Management Studio letöltése: https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16
+    Microsoft SQL Server Management Studio letöltése: https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16
 
 
 Dependencies telepítése:
@@ -36,9 +36,9 @@ Visual Studio -> Tools -> NuGet Package Manager -> Manage NuGet Packages For Sol
 
 SQL Server konfigurálása:
 
-  Visual Studio -> View -> SQL Server Object Explorer -> Add SQL Server -> Local -> DESKTOP-QM7PL5T\SQLEXPRESS (a te gépeden más lesz) -> Connect
+    Visual Studio -> View -> SQL Server Object Explorer -> Add SQL Server -> Local -> DESKTOP-QM7PL5T\SQLEXPRESS (a te gépeden más lesz) -> Connect
   
-  Microsoft SQL Server Management Studio -> Server name: DESKTOP-QM7PL5T\SQLEXPRESS (a te gépeden más lesz) -> Connect
+    Microsoft SQL Server Management Studio -> Server name: DESKTOP-QM7PL5T\SQLEXPRESS (a te gépeden más lesz) -> Connect
   
   
   
@@ -52,13 +52,13 @@ Adatbázis connection string konfigurálása:
   
 Adatbázis migráció:
 
-  Visual Studio -> NuGet Package Manager -> Package Manager Console 
+    Visual Studio -> NuGet Package Manager -> Package Manager Console 
   
-  PM> dotnet ef migrations add InitialMigration
+    PM> dotnet ef migrations add InitialMigration
   
-  PM> dotnet ef database update
+    PM> dotnet ef database update
   
-  Ha itt esetleg a build során hiba van, törölni kell a Migrations mappa tartalmát a Solution Explorerben.
+    Ha itt esetleg a build során hiba van, törölni kell a Migrations mappa tartalmát a Solution Explorerben.
   
   
   
@@ -68,8 +68,8 @@ Indítsd el a projektet. Ha minden jól meg, meg fog nyitni egy Console ablakot,
   
 XAMPP konfigurálása:
 
-  letöltés: https://www.apachefriends.org/
+    letöltés: https://www.apachefriends.org/
   
-  XAMPP -> explorer -> htdocs mappába másold be a SolarSystems projektből a Website mappát -> indítsd el az apache-t -> admin
+    XAMPP -> explorer -> htdocs mappába másold be a SolarSystems projektből a Website mappát -> indítsd el az apache-t -> admin
   
-  http://localhost/Websites linkre menj fel, indítsd el a LoginPage.html -t
+    http://localhost/Websites linkre menj fel, indítsd el a LoginPage.html -t
