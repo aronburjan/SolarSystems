@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SolarSystems.Models;
+using SolarSystems.Services;
 
 namespace SolarSystems.Controllers
 {
@@ -14,25 +15,25 @@ namespace SolarSystems.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly SolarSystemsDbContext _context;
+        private readonly Services.IUserService _UserService;
 
-        public UsersController(SolarSystemsDbContext context)
+        public UsersController(IUserService userService)
         {
-            _context = context;
+            _UserService = userService;
         }
 
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.Include(u => u.Projects).ToListAsync();
+            return await _UserService.GetUsers();
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(long id)
+        public async Task<ActionResult<User>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _UserService.GetUserById(id);
 
             if (user == null)
             {
@@ -45,47 +46,22 @@ namespace SolarSystems.Controllers
         [HttpPost("{username}/{password}")]
         public async Task<ActionResult<IEnumerable<User>>> PostUser(string username, string password)
         {
-            if (_context.Users == null)
+            var user = await _UserService.GetUserByUsernameAndPassword(username, password);
+            if (user == null)
             {
                 return NotFound();
             }
-            var user = await _context.Users.Where(u => u.Name.Equals(username) && u.Password.Equals(password)).ToListAsync();
-            if (user.IsNullOrEmpty())
-            {
-                return NotFound();
-            }
+
             return user;
         }
 
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, User user)
+        public async Task<IActionResult> PutUser(int id, User user)
         {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var _user = await _UserService.UpdateUser(id, user);
+            return _user;
         }
 
         // POST: api/Users
@@ -93,10 +69,7 @@ namespace SolarSystems.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            //return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            var _user = await _UserService.AddUser(user);
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
 
@@ -104,23 +77,11 @@ namespace SolarSystems.Controllers
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(long id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var _user = await _UserService.DeleteUser(id);
+            return _user;
         }
 
-        private bool UserExists(long id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
     }
 }

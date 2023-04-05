@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SolarSystems.Models;
+using SolarSystems.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<IUserService, UserService>();
 
 // Add services to the container.
 

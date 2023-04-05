@@ -126,6 +126,34 @@ namespace SolarSystems.Controllers
             return CreatedAtAction("GetComponent", new { id = component.Id }, component);
         }
 
+        //SERVICE
+        [HttpPost("{containerRow}/{containerCol}/{containerNumber}")]
+        public async Task<ActionResult<Component>> AddComponentToContainer(Component component, int containerRow, int containerCol, int containerNumber)
+        {
+            if (_context.Component == null)
+            {
+                return Problem("Entity set 'SolarSystemsDbContext.Component'  is null.");
+            }
+
+            var container = await _context.Container.Where(c => c.containerRow == containerRow && c.containerColumn == containerCol && c.containerNumber == containerNumber).FirstOrDefaultAsync();
+            if(container == null)
+            {
+                return Problem("Invalid container!");
+            }
+            else
+            {
+                _context.Component.Add(component);
+                await _context.SaveChangesAsync();
+                container.Component = component;
+            }
+
+            
+            
+
+            return CreatedAtAction("GetComponent", new { id = component.Id }, component);
+        }
+
+
         // DELETE: api/Components/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComponent(int id)
