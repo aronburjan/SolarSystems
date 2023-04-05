@@ -31,23 +31,6 @@ namespace SolarSystems.Controllers
             return await _context.Project.ToListAsync();
         }
 
-        [HttpGet("projectnumber/{projectnumber}")]
-        public async Task<ActionResult<IEnumerable<Project>>> GetProjectNumber(int projectnumber)
-        {
-            if (_context.Project == null)
-            {
-                return NotFound();
-            }
-            var project = await _context.Project.Where(a => a.projectNumber == projectnumber).ToListAsync();
-
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            return project;
-        }
-
         // GET: api/Projects/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Project>> GetProject(int id)

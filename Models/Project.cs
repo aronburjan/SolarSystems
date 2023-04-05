@@ -12,15 +12,9 @@ namespace SolarSystems.Models
 
         public int Id { get; set; } //row identification (unique)
 
-
-        public int projectNumber { get; set; } //project identification (not unique)
-        
-        public int neededComponentQuantity { get; set; }
-
-        public int availableComponentQuantity { get; set; }
-
         //public virtual ICollection<Component> Component { get; set; }
-        public ICollection<ProjectStatus> ProjectStatuses { get; set; }
+        public ICollection<ProjectStatus>? ProjectStatuses { get; set; }
+        public ICollection<Component>? Components { get; set; }
 
 
 
