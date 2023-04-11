@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SolarSystems.Models;
+using SolarSystems.Services;
 
 namespace SolarSystems.Controllers
 {
@@ -13,9 +14,9 @@ namespace SolarSystems.Controllers
     [ApiController]
     public class ComponentsController : ControllerBase
     {
-        private readonly SolarSystemsDbContext _context;
+        private readonly IComponentService _context; //ehelyett iuserservice
 
-        public ComponentsController(SolarSystemsDbContext context)
+        public ComponentsController(IComponentService context)
         {
             _context = context;
         }
@@ -24,27 +25,14 @@ namespace SolarSystems.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Component>>> GetComponent()
         {
-          if (_context.Component == null)
-          {
-              return NotFound();
-          }
-            return await _context.Component.ToListAsync();
+            return await _context.GetComponent();
         }
 
         // GET: api/Components/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Component>> GetComponent(int id)
-        {
-          if (_context.Component == null)
-          {
-              return NotFound();
-          }
-            var component = await _context.Component.FindAsync(id);
-
-            if (component == null)
-            {
-                return NotFound();
-            }
+        {     
+            var component = await _context.GetComponentById(id);
 
             return component;
         }
@@ -54,30 +42,9 @@ namespace SolarSystems.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutComponent(int id, Component component)
         {
-            if (id != component.Id)
-            {
-                return BadRequest();
-            }
+            var _component = await _context.UpdateComponent(id, component);
+            return _component;
 
-            _context.Entry(component).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ComponentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // PUT: api/Components/5/5000
@@ -85,30 +52,10 @@ namespace SolarSystems.Controllers
         public async Task<IActionResult> PutComponentNewPrice(int id, int price)
         {
 
-            var component = await _context.Component.FindAsync(id);
+            var component = await _context.PutComponentNewPrice(id, price);
+            return component;
 
-            if (component == null)
-            {
-                return NotFound();
-            }
-            component.price = price;
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ComponentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            
         }
 
         // POST: api/Components
@@ -116,41 +63,17 @@ namespace SolarSystems.Controllers
         [HttpPost]
         public async Task<ActionResult<Component>> PostComponent(Component component)
         {
-          if (_context.Component == null)
-          {
-              return Problem("Entity set 'SolarSystemsDbContext.Component'  is null.");
-          }
-            _context.Component.Add(component);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetComponent", new { id = component.Id }, component);
+            var _component = await _context.AddComponent(component);
+            return CreatedAtAction(nameof(GetComponent), new { id = component.Id },component);
         }
 
         //SERVICE
         [HttpPost("{containerRow}/{containerCol}/{containerNumber}")]
         public async Task<ActionResult<Component>> AddComponentToContainer(Component component, int containerRow, int containerCol, int containerNumber)
         {
-            if (_context.Component == null)
-            {
-                return Problem("Entity set 'SolarSystemsDbContext.Component'  is null.");
-            }
 
-            var container = await _context.Container.Where(c => c.containerRow == containerRow && c.containerColumn == containerCol && c.containerNumber == containerNumber).FirstOrDefaultAsync();
-            if(container == null)
-            {
-                return Problem("Invalid container!");
-            }
-            else
-            {
-                _context.Component.Add(component);
-                await _context.SaveChangesAsync();
-                container.Component = component;
-            }
-
-            
-            
-
-            return CreatedAtAction("GetComponent", new { id = component.Id }, component);
+            var _component = await _context.AddComponentToContainer(component, containerRow,containerCol,containerNumber);
+            return CreatedAtAction(nameof(GetComponent), new { id = component.Id }, component);
         }
 
 
@@ -158,25 +81,11 @@ namespace SolarSystems.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComponent(int id)
         {
-            if (_context.Component == null)
-            {
-                return NotFound();
-            }
-            var component = await _context.Component.FindAsync(id);
-            if (component == null)
-            {
-                return NotFound();
-            }
-
-            _context.Component.Remove(component);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var _component = await _context.DeleteComponent(id);
+            return _component;
         }
+            
 
-        private bool ComponentExists(int id)
-        {
-            return (_context.Component?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+
     }
 }

@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SolarSystems.Models;
+using SolarSystems.Services;
+
 
 namespace SolarSystems.Controllers
 {
@@ -13,9 +14,9 @@ namespace SolarSystems.Controllers
     [ApiController]
     public class ContainersController : ControllerBase
     {
-        private readonly SolarSystemsDbContext _context;
+        private readonly IContainerService _context;
 
-        public ContainersController(SolarSystemsDbContext context)
+        public ContainersController(IContainerService context)
         {
             _context = context;
         }
@@ -24,27 +25,15 @@ namespace SolarSystems.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Container>>> GetContainer()
         {
-          if (_context.Container == null)
-          {
-              return NotFound();
-          }
-            return await _context.Container.ToListAsync();
+
+            return await _context.GetContainer();
         }
 
         // GET: api/Containers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Container>> GetContainer(int id)
         {
-          if (_context.Container == null)
-          {
-              return NotFound();
-          }
-            var container = await _context.Container.FindAsync(id);
-
-            if (container == null)
-            {
-                return NotFound();
-            }
+            var container = await _context.GetContainerById(id);
 
             return container;
         }
@@ -53,50 +42,18 @@ namespace SolarSystems.Controllers
         [HttpGet("containernumber/{containerRow}/{containerColumn}/{containerNumber}")]
         public async Task<ActionResult<IEnumerable<Container>>> GetContainerNumber(int containerRow, int containerColumn, int containerNumber)
         {
-            if (_context.Container == null)
-            {
-                return NotFound();
-            }
-            var container = await _context.Container.Where(a => a.containerRow == containerRow
-                                                      && a.containerColumn == containerRow && a.containerNumber == containerNumber).ToListAsync();
-
-            if (container == null)
-            {
-                return NotFound();
-            }
-
+            var container = await _context.GetContainerNumber(containerRow,containerColumn, containerNumber);
             return container;
         }
+
 
         // PUT: api/Containers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutContainer(int id, Container container)
         {
-            if (id != container.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(container).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ContainerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var _container = await _context.UpdateContainer(id, container);
+            return _container;
         }
 
         // POST: api/Containers
@@ -104,39 +61,18 @@ namespace SolarSystems.Controllers
         [HttpPost]
         public async Task<ActionResult<Container>> PostContainer(Container container)
         {
-          if (_context.Container == null)
-          {
-              return Problem("Entity set 'SolarSystemsDbContext.Container'  is null.");
-          }
-            _context.Container.Add(container);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetContainer", new { id = container.Id }, container);
+            var _container = await _context.AddContainer(container);
+            return CreatedAtAction(nameof(GetContainer), new { id = container.Id }, container);
         }
 
         // DELETE: api/Containers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteContainer(int id)
         {
-            if (_context.Container == null)
-            {
-                return NotFound();
-            }
-            var container = await _context.Container.FindAsync(id);
-            if (container == null)
-            {
-                return NotFound();
-            }
-
-            _context.Container.Remove(container);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var _container = await _context.DeleteContainer(id);
+            return _container;
         }
 
-        private bool ContainerExists(int id)
-        {
-            return (_context.Container?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+        
     }
 }

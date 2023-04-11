@@ -4,7 +4,14 @@ using SolarSystems.Models;
 using SolarSystems.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<IComponentService, ComponentService>();
+builder.Services.AddScoped<IContainerService, ContainerService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IProjectStatusService, ProjectStatusService>();
+
+
+//ennek a mintájára a többi service
 
 // Add services to the container.
 

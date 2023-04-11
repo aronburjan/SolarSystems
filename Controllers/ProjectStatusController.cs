@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SolarSystems.Models;
+using SolarSystems.Services;
 
 namespace SolarSystems.Controllers
 {
@@ -13,9 +15,9 @@ namespace SolarSystems.Controllers
     [ApiController]
     public class ProjectStatusController : ControllerBase
     {
-        private readonly SolarSystemsDbContext _context;
+        private readonly IProjectStatusService _context;
 
-        public ProjectStatusController(SolarSystemsDbContext context)
+        public ProjectStatusController(IProjectStatusService context)
         {
             _context = context;
         }
@@ -24,29 +26,16 @@ namespace SolarSystems.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProjectStatus>>> GetProjectStatus()
         {
-          if (_context.ProjectStatus == null)
-          {
-              return NotFound();
-          }
-            return await _context.ProjectStatus.ToListAsync();
+            return await _context.GetProjectStatus();
         }
+
 
         // GET: api/ProjectStatus/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProjectStatus>> GetProjectStatus(int id)
         {
-          if (_context.ProjectStatus == null)
-          {
-              return NotFound();
-          }
-            var projectStatus = await _context.ProjectStatus.FindAsync(id);
-
-            if (projectStatus == null)
-            {
-                return NotFound();
-            }
-
-            return projectStatus;
+          var project = await _context.GetProjectStatusById(id);
+            return project;
         }
 
         // PUT: api/ProjectStatus/5
@@ -54,30 +43,8 @@ namespace SolarSystems.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProjectStatus(int id, ProjectStatus projectStatus)
         {
-            if (id != projectStatus.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(projectStatus).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProjectStatusExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var _project = await _context.UpdateProjectStatus(id, projectStatus);
+            return _project;
         }
 
         // POST: api/ProjectStatus
@@ -85,39 +52,18 @@ namespace SolarSystems.Controllers
         [HttpPost]
         public async Task<ActionResult<ProjectStatus>> PostProjectStatus(ProjectStatus projectStatus)
         {
-          if (_context.ProjectStatus == null)
-          {
-              return Problem("Entity set 'SolarSystemsDbContext.ProjectStatus'  is null.");
-          }
-            _context.ProjectStatus.Add(projectStatus);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetProjectStatus", new { id = projectStatus.Id }, projectStatus);
+            var _project = await _context.AddProjectStatus(projectStatus);
+            return CreatedAtAction(nameof(GetProjectStatus), new { id = projectStatus.Id }, projectStatus);
         }
 
         // DELETE: api/ProjectStatus/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProjectStatus(int id)
         {
-            if (_context.ProjectStatus == null)
-            {
-                return NotFound();
-            }
-            var projectStatus = await _context.ProjectStatus.FindAsync(id);
-            if (projectStatus == null)
-            {
-                return NotFound();
-            }
-
-            _context.ProjectStatus.Remove(projectStatus);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var _project = await _context.DeleteProjectStatus(id);
+            return _project;
         }
 
-        private bool ProjectStatusExists(int id)
-        {
-            return (_context.ProjectStatus?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+        
     }
 }
