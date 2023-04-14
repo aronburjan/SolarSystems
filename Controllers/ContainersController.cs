@@ -40,7 +40,7 @@ namespace SolarSystems.Controllers
 
         // GET by row and column and number
         [HttpGet("containernumber/{containerRow}/{containerColumn}/{containerNumber}")]
-        public async Task<ActionResult<IEnumerable<Container>>> GetContainerNumber(int containerRow, int containerColumn, int containerNumber)
+        public async Task<ActionResult<Container>> GetContainerNumber(int containerRow, int containerColumn, int containerNumber)
         {
             var container = await _context.GetContainerNumber(containerRow,containerColumn, containerNumber);
             return container;

@@ -68,12 +68,11 @@ namespace SolarSystems.Controllers
         }
 
         //SERVICE
-        [HttpPost("{containerRow}/{containerCol}/{containerNumber}")]
-        public async Task<ActionResult<Component>> AddComponentToContainer(Component component, int containerRow, int containerCol, int containerNumber)
+        [HttpPost("{componentName}/{containerRow}/{containerCol}/{containerNumber}/{orderQuantity}")]
+        public async Task<ActionResult<Component>> AddComponentToContainer(string componentName, int containerRow, int containerCol, int containerNumber, int orderQuantity)
         {
-
-            var _component = await _context.AddComponentToContainer(component, containerRow,containerCol,containerNumber);
-            return CreatedAtAction(nameof(GetComponent), new { id = component.Id }, component);
+            var _component = await _context.AddComponentToContainer(componentName, containerRow,containerCol,containerNumber, orderQuantity);
+            return NoContent();
         }
 
 

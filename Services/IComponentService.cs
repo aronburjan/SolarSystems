@@ -14,8 +14,10 @@ namespace SolarSystems.Services
         public Task<ActionResult<Component>> AddComponent(Component component);
         public bool ComponentExists(int id);
 
-        public Task<ActionResult<Component>> AddComponentToContainer(Component component, int containerRow, int containerCol, int containerNumber);
+        public Task<ActionResult<Component>> AddComponentToContainer(string componentName, int containerRow, int containerCol, int containerNumber, int quantity);
 
+        public Task<ActionResult<Component>> GetComponentByName(string componentName);
         public Task<IActionResult> DeleteComponent(int id);
+
     }
 }

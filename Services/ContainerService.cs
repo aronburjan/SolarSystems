@@ -36,14 +36,14 @@ namespace SolarSystems.Services
                 return container;
             }
 
-            public async Task<ActionResult<IEnumerable<Container>>> GetContainerNumber(int containerRow, int containerColumn, int containerNumber)
+            public async Task<ActionResult<Container>> GetContainerNumber(int containerRow, int containerColumn, int containerNumber)
             {
                 if (_context.Container == null)
                 {
                     return NotFound();
                 }
                 var container = await _context.Container.Where(a => a.containerRow == containerRow
-                                                          && a.containerColumn == containerRow && a.containerNumber == containerNumber).ToListAsync();
+                                                          && a.containerColumn == containerRow && a.containerNumber == containerNumber).FirstOrDefaultAsync();
 
                 if (container == null)
                 {

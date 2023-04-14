@@ -37,6 +37,22 @@ namespace SolarSystems.Services
             return component;
         }
 
+        public async Task<ActionResult<Component>> GetComponentByName(string componentName)
+        {
+            if (_context.Component == null)
+            {
+                return NotFound();
+            }
+            var component = await _context.Component.Where(c => c.componentName.Equals(componentName)).FirstOrDefaultAsync();
+
+            if (component == null)
+            {
+                return NotFound();
+            }
+
+            return component;
+        }
+
         public async Task<IActionResult> UpdateComponent(int id, Component component) {
             if (id != component.Id)
             {
@@ -102,25 +118,35 @@ namespace SolarSystems.Services
         }
 
 
-        public async Task<ActionResult<Component>> AddComponentToContainer(Component component, int containerRow, int containerCol, int containerNumber) {
+        public async Task<ActionResult<Component>> AddComponentToContainer(string componentName, int containerRow, int containerCol, int containerNumber, int quantity) {
             if (_context.Component == null)
             {
                 return Problem("Entity set 'SolarSystemsDbContext.Component'  is null.");
             }
-
-            var container = await _context.Container.Where(c => c.containerRow == containerRow && c.containerColumn == containerCol && c.containerNumber == containerNumber).FirstOrDefaultAsync();
-            if (container == null)
+            ContainerService containerService = new ContainerService(_context);
+            ComponentService componentService = new ComponentService(_context);
+            var container = await containerService.GetContainerNumber(containerRow, containerCol, containerNumber);
+            var component = await componentService.GetComponentByName(componentName);
+            if(component == null)
             {
-                return Problem("Invalid container!");
+                return Problem("Invalid component name");
+            }
+            if(container.Value == null)
+            {
+                return Problem("Invalid container.");
+            }
+            if((container.Value.freeSpace - component.Value.maxStack*quantity) < 0)
+            {
+                return Problem("Component will not fit into container.");
             }
             else
             {
-                _context.Component.Add(component);
-                await _context.SaveChangesAsync();
-                container.Component = component;
+                container.Value.Component = component.Value;
+                container.Value.freeSpace -= component.Value.maxStack*quantity;
+                container.Value.quantityInContainer += quantity;
+                await containerService.UpdateContainer(container.Value.Id, container.Value);
             }
-
-            return CreatedAtAction(nameof(GetComponentById), new { id = component.Id }, component);
+            return NoContent();
         }
 
         public async Task<IActionResult> DeleteComponent(int id) {
@@ -144,7 +170,6 @@ namespace SolarSystems.Services
         public bool ComponentExists(int id) {
             return (_context.Component?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-
 
     }
 }
