@@ -48,7 +48,6 @@ body {
 }
 
 .tablediv {
-	display: flex;
 	width: 1000px;
 }
 
@@ -77,8 +76,9 @@ tr:nth-child(odd) {
   width: auto;
   margin: 0 auto;
   margin-right: auto;
+  display: inline-block;
+  margin-top: 20px;
 }
-
 
 .switch {
   position: relative;
