@@ -24,7 +24,7 @@
         const price = document.getElementById("priceInput").value;
         const max = document.getElementById("maxInput").value;
 		const address = "https://localhost:7032/api/Components"
-
+		//send POST request
         console.log("Adding component:", name, price, max);
 		fetch(address, {
 			method: "POST",
@@ -33,7 +33,7 @@
 			},
 			body: JSON.stringify({
 				componentName: name,
-				maxQuantity: max,
+				maxStack: max,
 				price: price})
 		})
 		.then(response => {
@@ -54,6 +54,7 @@
         const price = document.getElementById("newPriceInput").value;
 		const address = "https://localhost:7032/api/Components/" + id + "/" + price;
         console.log("Editing component:", id, price);
+		//send PUT request
 		fetch(address, {
 			method: "PUT"
 		})
@@ -72,6 +73,7 @@
 		function updateTable(){
 			let address = "https://localhost:7032/api/Components";
 			let counter = 0;
+			//send GET request
 			fetch(address, {
 				method: "GET"
 			})
@@ -83,7 +85,9 @@
 			}
 			})
 			.then(data => {
+				//clear table
 				document.getElementById('componentTable').innerHTML = '';
+				//create new table row
 				data.forEach(item =>{
 					let table = document.getElementById("componentTable");
 					let row = table.insertRow(counter);
@@ -91,10 +95,11 @@
 					let cellName = row.insertCell(1);
 					let cellPrice = row.insertCell(2);
 					let cellMax = row.insertCell(3);
+					//fill out cell data
 					cellID.innerHTML = item.id;
 					cellName.innerHTML = item.componentName;
 					cellPrice.innerHTML = item.price;
-					cellMax.innerHTML = item.maxQuantity;
+					cellMax.innerHTML = item.maxStack;
 					counter++;
 					}); 
 			})
