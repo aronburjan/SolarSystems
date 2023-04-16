@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SolarSystems.Models;
 
@@ -11,9 +12,11 @@ using SolarSystems.Models;
 namespace SolarSystems.Migrations
 {
     [DbContext(typeof(SolarSystemsDbContext))]
-    partial class SolarSystemsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230414133802_foreignkey")]
+    partial class foreignkey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,7 +70,7 @@ namespace SolarSystems.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ComponentId")
+                    b.Property<int>("ComponentId")
                         .HasColumnType("int");
 
                     b.Property<int>("containerColumn")
@@ -103,18 +106,6 @@ namespace SolarSystems.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CustomerName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("HourlyLaborRate")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LaborTime")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProjectDescription")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
@@ -140,9 +131,8 @@ namespace SolarSystems.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<string>("status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -192,7 +182,9 @@ namespace SolarSystems.Migrations
                 {
                     b.HasOne("SolarSystems.Models.Component", "Component")
                         .WithMany("Containers")
-                        .HasForeignKey("ComponentId");
+                        .HasForeignKey("ComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Component");
                 });

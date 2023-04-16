@@ -112,5 +112,27 @@ namespace SolarSystems.Services
                 return (_context.Container?.Any(e => e.Id == id)).GetValueOrDefault();
             }
 
+        public async Task<ActionResult<IEnumerable<Component>>> ListAvailableComponents()
+        {
+            List<Component> availableComponentsList = new List<Component>();
+            List<string> availableComponentNames = new List<string>();
+            var availableComponents = await _context.Container.Include(c => c.Component) // Explicitly include the Component objects
+                                                              .Where(c => c.Component != null)
+                                                              .ToListAsync();
+            if (availableComponents.Any())
+            {
+                for(int i=0; i<availableComponents.Count; i++)
+                {
+                    availableComponentsList.Add(availableComponents[i].Component);
+                    Console.WriteLine(availableComponents[i].Component.componentName);
+                }
+                return availableComponentsList;
+            }
+            else
+            {
+                return NotFound();
+            }
+            
+        }
     }
 }

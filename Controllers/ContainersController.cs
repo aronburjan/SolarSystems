@@ -39,11 +39,19 @@ namespace SolarSystems.Controllers
         }
 
         // GET by row and column and number
-        [HttpGet("containernumber/{containerRow}/{containerColumn}/{containerNumber}")]
+        [HttpGet("{containerRow}/{containerColumn}/{containerNumber}")]
         public async Task<ActionResult<Container>> GetContainerNumber(int containerRow, int containerColumn, int containerNumber)
         {
-            var container = await _context.GetContainerNumber(containerRow,containerColumn, containerNumber);
+            var container = await _context.GetContainerNumber(containerRow, containerColumn, containerNumber);
             return container;
+        }
+
+        // GET available components
+        [HttpGet("/available")]
+        public async Task<ActionResult<IEnumerable<Component>>> GetAvailableComponents()
+        {
+            var componentList = await _context.ListAvailableComponents();
+            return componentList;
         }
 
 

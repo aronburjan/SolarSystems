@@ -11,6 +11,7 @@ namespace SolarSystems.Services
         public Task<ActionResult<User>> AddUser(User user);
         public Task<IActionResult> UpdateUser(int id, User user);
         public Task<IActionResult> DeleteUser(int id);
+
         public bool UserExists(long id);
     }
 

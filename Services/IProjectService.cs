@@ -12,8 +12,11 @@ namespace SolarSystems.Services
 
         public  Task<ActionResult<Project>> AddProject(Project project);
 
+        public Task<ActionResult<Project>> CreateNewProject(int projectExpertId, string ProjectDescription, string CustomerName, int HourlyLaborRate, int LaborTime);
+
         public  Task<IActionResult> DeleteProject(int id);
 
+        public int GetPriceEstimate(int id);
         public bool ProjectExists(int id);
     }
 }

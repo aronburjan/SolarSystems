@@ -1,4 +1,7 @@
-﻿namespace SolarSystems.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
+namespace SolarSystems.Models
 {
     public class Component
     {
@@ -12,6 +15,8 @@
         public int maxStack { get; set; }
 
         public int price { get; set; }
+
+        [JsonIgnore]
         public virtual ICollection<Container>? Containers { get; set; }
 
         public ICollection<Project>? Projects { get; set; }

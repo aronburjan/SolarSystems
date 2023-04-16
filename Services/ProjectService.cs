@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Versioning;
 using SolarSystems.Models;
 
 namespace SolarSystems.Services
@@ -95,6 +96,45 @@ namespace SolarSystems.Services
         public bool ProjectExists(int id)
         {
             return (_context.Project?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        public int GetPriceEstimate(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ActionResult<Project>> CreateNewProject(int projectExpertId, string ProjectDescription, string CustomerName, int HourlyLaborRate, int LaborTime)
+        {
+            UserService userService = new UserService(_context);
+            Project newProject = new Project
+            {
+                ProjectDescription = ProjectDescription,
+                CustomerName = CustomerName,
+                HourlyLaborRate = HourlyLaborRate,
+                LaborTime = LaborTime
+            };
+
+            //set expert id in user table
+            var expert = await userService.GetUserById(projectExpertId);
+            if(expert == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                if (expert.Value.Projects == null)
+                {
+                    // Initialize the Projects collection of chosen expert if it's null
+                    expert.Value.Projects = new List<Project>();
+                }
+                expert.Value.Projects.Add(newProject);
+                await userService.UpdateUser(expert.Value.Id, expert.Value);
+            }
+
+            _context.Project.Add(newProject);
+            await _context.SaveChangesAsync();
+
+            return newProject;
         }
     }
 }

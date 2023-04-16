@@ -12,6 +12,13 @@ namespace SolarSystems.Models
 
         public int Id { get; set; } //row identification (unique)
 
+        public int HourlyLaborRate { get; set; }
+
+        public int LaborTime { get; set; }
+
+        public string? ProjectDescription { get; set; } 
+        public string? CustomerName { get; set; }
+
         //public virtual ICollection<Component> Component { get; set; }
         public ICollection<ProjectStatus>? ProjectStatuses { get; set; }
         public ICollection<Component>? Components { get; set; }

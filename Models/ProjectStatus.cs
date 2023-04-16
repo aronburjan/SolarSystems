@@ -4,6 +4,13 @@
     {
         public int Id { get; set; }
         public string DateTime { get; set; }
-        public int status { get; set; }
+        public string status { get; set; }
+        //  New
+        //  Draft   
+        //  Wait
+        //  Scheduled
+        //  InProgress
+        //  Completed
+        //  Failed
     }
 }
