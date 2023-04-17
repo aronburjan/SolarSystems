@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using NuGet.Versioning;
 using SolarSystems.Models;
+using System.Composition;
 
 namespace SolarSystems.Services
 {
@@ -103,12 +104,13 @@ namespace SolarSystems.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ActionResult<Project>> CreateNewProject(int projectExpertId, string ProjectDescription, string CustomerName, int HourlyLaborRate, int LaborTime)
+        public async Task<ActionResult<Project>> CreateNewProject(int projectExpertId, string ProjectDescription, string ProjectLocation, string CustomerName, int HourlyLaborRate, int LaborTime)
         {
             UserService userService = new UserService(_context);
             Project newProject = new Project
             {
                 ProjectDescription = ProjectDescription,
+                ProjectLocation= ProjectLocation,
                 CustomerName = CustomerName,
                 HourlyLaborRate = HourlyLaborRate,
                 LaborTime = LaborTime
@@ -135,6 +137,38 @@ namespace SolarSystems.Services
             await _context.SaveChangesAsync();
 
             return newProject;
+        }
+
+        public async Task<ActionResult<Project>> AddComponentToProject(int componentId, int componentQuantity, int projectId)
+        {
+            ContainerService containerService = new ContainerService(_context);
+            ComponentService componentService = new ComponentService(_context);
+            ProjectStatusService projectStatusService = new ProjectStatusService(_context);
+            var component = await componentService.GetComponentById(componentId); //find component by id
+            var project = await this.GetProjectById(projectId) ; //find project by id
+            var numberOfComponentsAvailable = containerService.NumberOfAvailableComponentsById(component.Value.Id); //calculate how many pieces of component is available currently
+            //if there is not enough ordering is possible
+            if(numberOfComponentsAvailable < componentQuantity)
+            {
+                //todo
+            }
+            else
+            {
+                //assign components to project
+                if (project.Value.Components == null)
+                {
+                    // Initialize the Projects collection of chosen expert if it's null
+                    project.Value.Components = new List<Component>();
+                }
+                project.Value.Components.Add(component.Value);
+                await this.UpdateProject(projectId, project.Value);
+                var projectStatus = await projectStatusService.GetProjectStatusByProjectId(projectId);
+                await projectStatusService.AddProjectStatusWithProjectId(projectId);
+            }
+            //remove component that is to be used from the warehouse if avialable
+            //todo
+            //project status changes to draft
+            return project.Value;
         }
     }
 }

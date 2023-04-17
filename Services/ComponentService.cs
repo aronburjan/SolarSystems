@@ -135,6 +135,10 @@ namespace SolarSystems.Services
             {
                 return Problem("Invalid container.");
             }
+            if(container.Value.ComponentId != component.Value.Id)
+            {
+                return Problem("Container already holds a different type of component");
+            }
             if((container.Value.freeSpace - component.Value.maxStack*quantity) < 0)
             {
                 return Problem("Component will not fit into container.");

@@ -58,10 +58,17 @@ namespace SolarSystems.Controllers
         }
 
         [HttpPost("/CreateNewProject")]
-        public async Task<ActionResult<Project>> CreateNewProject(int projectExpertId, string ProjectDescription, string CustomerName, int HourlyLaborRate, int LaborTime)
+        public async Task<ActionResult<Project>> CreateNewProject(int projectExpertId, string ProjectDescription, string ProjectLocation, string CustomerName, int HourlyLaborRate, int LaborTime)
         {
-            var _project = await _context.CreateNewProject(projectExpertId, ProjectDescription, CustomerName, HourlyLaborRate, LaborTime);
+            var _project = await _context.CreateNewProject(projectExpertId, ProjectDescription, ProjectLocation, CustomerName, HourlyLaborRate, LaborTime);
             return CreatedAtAction(nameof(GetProject), new { id = _project.Value.Id }, _project);
+        }
+
+        [HttpPost("/AddComponentToProject/{componentId}/{componentQuantity}/{projectId}")]
+        public async Task<ActionResult<Project>> AddComponentToProject(int componentId, int componentQuantity, int projectId)
+        {
+            var _project = await _context.AddComponentToProject(componentId, componentQuantity, projectId);
+            return NoContent();
         }
 
         // DELETE: api/Projects/5

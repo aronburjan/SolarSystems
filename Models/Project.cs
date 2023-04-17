@@ -16,6 +16,8 @@ namespace SolarSystems.Models
 
         public int LaborTime { get; set; }
 
+        public string? ProjectLocation { get; set; }
+
         public string? ProjectDescription { get; set; } 
         public string? CustomerName { get; set; }
 

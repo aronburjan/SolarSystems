@@ -1,4 +1,6 @@
-﻿namespace SolarSystems.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SolarSystems.Models
 {
     public class ProjectStatus
     {
@@ -12,5 +14,9 @@
         //  InProgress
         //  Completed
         //  Failed
+        [ForeignKey("ProjectId")]
+        public int ProjectId { get; set; }
+
+        public virtual Project? Project { get; set; } //component id
     }
 }

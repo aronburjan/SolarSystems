@@ -13,7 +13,10 @@ namespace SolarSystems.Services
 
         public Task<ActionResult<ProjectStatus>> AddProjectStatus(ProjectStatus projectStatus);
 
+        public Task<ActionResult<ProjectStatus>> AddProjectStatusWithProjectId(int projectId);
         public  Task<IActionResult> DeleteProjectStatus(int id);
+
+        public Task<ActionResult<ProjectStatus>> GetProjectStatusByProjectId(int projectId);
 
         public bool ProjectStatusExists(int id);
     }

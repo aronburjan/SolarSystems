@@ -12,7 +12,9 @@ namespace SolarSystems.Services
 
         public  Task<ActionResult<Project>> AddProject(Project project);
 
-        public Task<ActionResult<Project>> CreateNewProject(int projectExpertId, string ProjectDescription, string CustomerName, int HourlyLaborRate, int LaborTime);
+        public Task<ActionResult<Project>> CreateNewProject(int projectExpertId, string ProjectDescription, string ProjectLocation, string CustomerName, int HourlyLaborRate, int LaborTime);
+
+        public Task<ActionResult<Project>> AddComponentToProject(int componentId, int componentQuantity, int project);
 
         public  Task<IActionResult> DeleteProject(int id);
 

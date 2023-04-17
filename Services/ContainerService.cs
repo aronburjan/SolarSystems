@@ -134,5 +134,18 @@ namespace SolarSystems.Services
             }
             
         }
+
+        public int NumberOfAvailableComponentsById(int id)
+        {
+            var containersHoldingComponent = _context.Container.Include(c => c.Component) // Explicitly include the Component objects
+                                                              .Where(c => c.Component.Id == id)
+                                                              .ToListAsync();
+            int availableQuantity = 0;
+            for(int i=0; i<containersHoldingComponent.Result.Count; i++)
+            {
+                availableQuantity += containersHoldingComponent.Result[i].quantityInContainer;
+            }
+            return availableQuantity;
+        }
     }
 }

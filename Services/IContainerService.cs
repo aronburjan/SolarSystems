@@ -12,6 +12,8 @@ namespace SolarSystems.Services
         public  Task<IActionResult> UpdateContainer(int id, Container container);
 
         public Task<ActionResult<IEnumerable<Component>>> ListAvailableComponents();
+
+        public int NumberOfAvailableComponentsById(int id);
         public Task<ActionResult<Container>> AddContainer(Container container);
 
         public  Task<IActionResult> DeleteContainer(int id);
