@@ -64,7 +64,8 @@ namespace SolarSystems.Controllers
             return CreatedAtAction(nameof(GetProject), new { id = _project.Value.Id }, _project);
         }
 
-        [HttpPost("/AddComponentToProject/{componentId}/{componentQuantity}/{projectId}")]
+        //FIXÁLNI KÉNE!!!!!!!!!!!!!!!!!!!!
+        [HttpPost("{componentId}/{componentQuantity}/{projectId}")]
         public async Task<ActionResult<Project>> AddComponentToProject(int componentId, int componentQuantity, int projectId)
         {
             var _project = await _context.AddComponentToProject(componentId, componentQuantity, projectId);
