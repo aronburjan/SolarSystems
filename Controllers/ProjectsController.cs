@@ -57,10 +57,10 @@ namespace SolarSystems.Controllers
             return CreatedAtAction(nameof(GetProject), new { id = project.Id }, project);
         }
 
-        [HttpPost("/CreateNewProject")]
-        public async Task<ActionResult<Project>> CreateNewProject(int projectExpertId, string ProjectDescription, string ProjectLocation, string CustomerName, int HourlyLaborRate, int LaborTime)
+        [HttpPost("{ProjectDescription}/{ProjectLocation}/{CustomerName}/{HourlyLaborRate}/{LaborTime}")]
+        public async Task<ActionResult<Project>> CreateNewProject( string ProjectDescription, string ProjectLocation, string CustomerName, int HourlyLaborRate, int LaborTime)
         {
-            var _project = await _context.CreateNewProject(projectExpertId, ProjectDescription, ProjectLocation, CustomerName, HourlyLaborRate, LaborTime);
+            var _project = await _context.CreateNewProject(ProjectDescription, ProjectLocation, CustomerName, HourlyLaborRate, LaborTime);
             return CreatedAtAction(nameof(GetProject), new { id = _project.Value.Id }, _project);
         }
 

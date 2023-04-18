@@ -5,9 +5,10 @@
 			const description 	= document.getElementById("projectDescriptionInput").value;
 			const ltime 		= document.getElementById("laborTimeInput").value;
 			const lrate 		= document.getElementById("hourlyLaborRateInput").value;
-			const address 		= "https://localhost:7032/createNewProject"
+			const projectExpertId = 3;
+			const address 		= "https://localhost:7032/api/Projects/CreateNewProject"
 			//send POST request
-			console.log("Adding Project:", place, customer, description, ltime, lrate, address);
+			console.log("Adding Project:", projectexpertid, place, customer, description, ltime, lrate, address);
 			fetch(address, 
 				{
 					method: "POST",
@@ -18,7 +19,8 @@
 					body: JSON.stringify
 						(
 							{
-							Location: place,
+							projectExpertId: projectexpertid,
+							projectLocation: place,
 							customerName: customer,
 							projectDescription: description,
 							laborTime: ltime,

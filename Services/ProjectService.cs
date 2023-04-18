@@ -104,9 +104,8 @@ namespace SolarSystems.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ActionResult<Project>> CreateNewProject(int projectExpertId, string ProjectDescription, string ProjectLocation, string CustomerName, int HourlyLaborRate, int LaborTime)
+        public async Task<ActionResult<Project>> CreateNewProject(string ProjectDescription, string ProjectLocation, string CustomerName, int HourlyLaborRate, int LaborTime)
         {
-            UserService userService = new UserService(_context);
             Project newProject = new Project
             {
                 ProjectDescription = ProjectDescription,
@@ -117,22 +116,6 @@ namespace SolarSystems.Services
             };
 
             //set expert id in user table
-            var expert = await userService.GetUserById(projectExpertId);
-            if(expert == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                if (expert.Value.Projects == null)
-                {
-                    // Initialize the Projects collection of chosen expert if it's null
-                    expert.Value.Projects = new List<Project>();
-                }
-                expert.Value.Projects.Add(newProject);
-                await userService.UpdateUser(expert.Value.Id, expert.Value);
-            }
-
             _context.Project.Add(newProject);
             await _context.SaveChangesAsync();
 
