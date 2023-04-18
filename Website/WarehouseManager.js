@@ -1,3 +1,5 @@
+updateComponentList();
+
 // Get all the cells of the table
 var cells = document.querySelectorAll('#TopDownShelvesTable td');
 
@@ -20,7 +22,7 @@ for (var i = 0; i < cells.length; i++) {
       cellsInCol[k].classList.add('selected');
     }
     
-    updateBottomTable(col);
+    updateBottomTable(col+1);
   });
 }
 
@@ -42,10 +44,10 @@ for (var l = 0; l < selectedCells.length; l++) {
     
 	
     //Get selected row/column
-    var row = this.parentNode.rowIndex;
-    var col = this.cellIndex;
+    
+    
     //Get selected shelf
-    var shelf = document.querySelector('#TopDownShelvesTable .selected').cellIndex;
+    
 
   });
 }
@@ -87,4 +89,38 @@ function updateComponentList(){
 function updateBottomTable(shelf) {
   console.log("Updating bottom table with data for column " + shelf);
 
+}
+
+function addComponent(){
+	let shelf = document.querySelector('#TopDownShelvesTable .selected').cellIndex +1;
+	let row = document.querySelector('#SelectedShelfTable .selected').parentNode.rowIndex +1;
+	let col = document.querySelector('#SelectedShelfTable .selected').cellIndex +1;
+	console.log(shelf, row, col);
+	
+	let quantity = document.getElementById("quantityInput").value;
+    let select = document.getElementById("componentList");
+	let component = select.options[select.selectedIndex].text;
+	console.log(quantity, component);
+	
+	
+	const address = "https://localhost:7032/api/Components/" + component + "/" + shelf + "/" + row + "/" + col + "/" + quantity  
+		//send POST request
+		fetch(address, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+
+		})
+		.then(response => {
+			console.log('response.status: ', response.status);
+			console.log(response);
+			if (!response.ok) {
+				console.log('Response not ok');
+				//document.getElementById("errorMessage").innerHTML = "ERROR: " + response.status;
+			} else {
+				updateBottomTable(shelf);
+			}
+		})
+		
 }
