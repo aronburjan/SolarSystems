@@ -38,14 +38,16 @@ SQL Server konfigurálása:
 
     Visual Studio -> View -> SQL Server Object Explorer -> Add SQL Server -> Local -> DESKTOP-QM7PL5T\SQLEXPRESS (a te gépeden más lesz) -> Connect
   
-    Microsoft SQL Server Management Studio -> Server name: DESKTOP-QM7PL5T\SQLEXPRESS (a te gépeden más lesz) -> Connect
+    Connection string kiszedése:
+    
+        Visual Studio -> View -> SQL Server Object Explorer -> Jobbklikk -> Properties -> másold ki a connection stringet
   
   
   
 Adatbázis connection string konfigurálása:
 
   Visual Studio -> apsettings.json -> első sorba illeszd be: "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost\\SQLEXPRESS; Data Source=.\\SQLExpress; Initial Catalog=SolarSystemsDb;Integrated Security=True;Pooling=False;Database=master;Trusted_Connection=True;TrustServerCertificate=True"
+    "DefaultConnection": "<kimásolt connection stringet ide illeszd be>;Trusted_Connection=True;TrustServerCertificate=True"
   },
   
   
