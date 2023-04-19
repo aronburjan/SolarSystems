@@ -1,0 +1,104 @@
+﻿* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* topbar */
+.topbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    background-color: #4caf50;
+}
+
+
+#displayButton {
+    display: none;
+    margin-top: 10px;
+}
+
+.selected {
+    background-color: #ddf;
+}
+
+    .topbar a {
+        color: white;
+        font-size: 24px;
+        text-decoration: none;
+        margin: 0 20px;
+        padding: 10px;
+    }
+
+.topbar-active {
+    background-color: white;
+    color: #4caf50;
+    border-radius: 5px;
+}
+
+
+
+/* fejléc */
+h1 {
+    text-align: center;
+    font-size: 36px;
+    margin-top: 50px;
+}
+
+/* táblázatok */
+table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    width: 80%;
+}
+
+thead {
+    background-color: #f2f2f2;
+    font-size: 18px;
+}
+
+th {
+    text-align: left;
+    padding: 10px;
+}
+
+td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* komponens táblázat */
+table#componentTable th:nth-child(1),
+table#componentTable td:nth-child(1) {
+    width: 10%;
+}
+
+table#componentTable th:nth-child(2),
+table#componentTable td:nth-child(2) {
+    width: 40%;
+}
+
+table#componentTable th:nth-child(3),
+table#componentTable td:nth-child(3) {
+    width: 20%;
+}
+
+table#componentTable th:nth-child(4),
+table#componentTable td:nth-child(4) {
+    width: 10%;
+}
+
+table#componentTable th:nth-child(5),
+table#componentTable td:nth-child(5) {
+    width: 20%;
+}
+
+/* error message */
+.errorMessage {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+}

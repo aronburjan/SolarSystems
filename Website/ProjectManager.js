@@ -38,14 +38,14 @@
 					}
 				else 
 					{
-					updateProjectable();
+					updateTable();
 					}
 				}
 				)
 		}
 
 
-		function updateProjectable(){
+		function updateTable(){
 			let address = "https://localhost:7032/api/Projects";
 			let counter = 0;
 			//send GET request

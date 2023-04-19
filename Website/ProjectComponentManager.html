@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Project Component Manager</title>
+    <script src="ProjectComponentManager.js"></script>
+    <link rel="stylesheet" href="ProjectComponentManager.css">
+    <script>
+        /* if (!sessionStorage.getItem('isLoggedIn')) {
+         window.location.href = 'LoginPage.html';
+     }*/
+        updateComponentTable();
+        updateTable();
+
+    </script>
+</head>
+<body>
+    <div class="topbar">
+        <a href="ProjectManager.html" class="topbar-active">Project Manager</a>
+    </div>
+
+    <h1>Components</h1>
+    <div class="tablediv">
+        <!--Components table-->
+
+        <table style="border: 1px solid black;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Selected</th>
+                </tr>
+            </thead>
+            <tbody id="componentTable">
+            </tbody>
+        </table>
+
+        <h1>Projects- Choose one</h1>
+
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Place</th>
+                        <th>Customer</th>
+                        <th>Description</th>
+                        <th>Labor Time</th>
+                        <th>Hourly Labor Rate</th>
+                        <th>ID</th>
+                    </tr>
+                </thead>
+                <tbody id="projectTable">
+                    <tr onclick="selectRow(this)"></tr>
+                </tbody>
+            </table>
+
+
+        </div>
+        <br>
+
+
+        <div id="selectedRow"> </div>
+
+
+
+
+
+    </div>
+
+    <!--  <button type="submit" onclick="addComponentsToProject()">Add components to project</button> -->
+    <!--Error message display-->
+    <div class="errorMessage" id="errorMessage">
+
+    </div>
+
+
+
+
+
+
+
+</body>
+</html>
