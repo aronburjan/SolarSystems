@@ -41,13 +41,6 @@ for (var l = 0; l < selectedCells.length; l++) {
 	
     //Select cell
     this.classList.add('selected');
-    
-	
-    //Get selected row/column
-    
-    
-    //Get selected shelf
-    
 
   });
 }
@@ -96,13 +89,11 @@ function updateBottomTable(shelf) {
 	var c=0;
 		while(cell=row.cells[c++])
 		{
-			cell.innerHTML = ' ';
+			cell.innerHTML = '('+r+','+c+')'+' <br> (Empty)';
 		}
 	}
-  
-  
-  
-  let address = "https://localhost:7032/api/Containers";
+
+	let address = "https://localhost:7032/api/Containers";
 			let counter = 0;
 			//send GET request
 			fetch(address, {
@@ -120,41 +111,43 @@ function updateBottomTable(shelf) {
 					let table = document.getElementById("SelectedShelfTable");
 
 					//Fill table 
-					var r=0;
-					while(row=table.rows[r++])
-					{
-						var c=0;
-						while(cell=row.cells[c++])
+					//Only check if container isn't empty and shelf matches
+					if ((item.quantityInContainer > 0) && (item.containerNumber == shelf)) {
+						var r=0;
+						while(row=table.rows[r++])
 						{
+							var c=0;
+							while(cell=row.cells[c++])
+							{
 							
-							console.log(shelf + ' ' + item.containerNumber + ' ' + r + ' ' + item.containerRow + ' ' + c + ' ' + item.containerColumn);
+								//console.log(shelf + ' ' + item.containerNumber + ' ' + r + ' ' + item.containerRow + ' ' + c + ' ' + item.containerColumn);
 							
-							//if cell coords match container coords, add text to cell
-							if ((item.containerNumber == shelf) && (item.containerRow == r) && (item.containerColumn == c)){
-								cell.innerHTML='Coord:('+r+','+c+')'+' <br> ID:(' + item.componentId + ') <br> Quantity:' + item.quantityInContainer ;
-							} 
+								//if cell coords match container coords, add text to cell
+								if ((item.containerRow == r) && (item.containerColumn == c)){
+									cell.innerHTML='('+r+','+c+')'+' <br> ID:(' + item.componentId + ') <br> Quantity:' + item.quantityInContainer ;
+								} 
+							}
 						}
 					}
-					
 					
 				}); 
 			})
 			.catch((err) => {
 				console.log(err);
 			});	
-
 }
 
 function addComponent(){
-	let shelf = document.querySelector('#TopDownShelvesTable .selected').cellIndex +1;
-	let row = document.querySelector('#SelectedShelfTable .selected').parentNode.rowIndex +1;
-	let col = document.querySelector('#SelectedShelfTable .selected').cellIndex +1;
-	console.log(shelf, row, col);
+	try {
+		let shelf = document.querySelector('#TopDownShelvesTable .selected').cellIndex +1;
+		let row = document.querySelector('#SelectedShelfTable .selected').parentNode.rowIndex +1;
+		let col = document.querySelector('#SelectedShelfTable .selected').cellIndex +1;
+		console.log(shelf, row, col);
 	
-	let quantity = document.getElementById("quantityInput").value;
-    let select = document.getElementById("componentList");
-	let component = select.options[select.selectedIndex].value;
-	console.log(quantity, component);
+		let quantity = document.getElementById("quantityInput").value;
+		let select = document.getElementById("componentList");
+		let component = select.options[select.selectedIndex].value;
+		console.log(quantity, component);
 	
 	
 	const address = "https://localhost:7032/api/Components/" + component + "/" + row + "/" + col + "/" + shelf + "/" + quantity  
@@ -171,10 +164,14 @@ function addComponent(){
 			console.log(response);
 			if (!response.ok) {
 				console.log('Response not ok');
-				//document.getElementById("errorMessage").innerHTML = "ERROR: " + response.status;
+				document.getElementById("errorMessage").innerHTML = "HTTP ERROR: " + response.status;
 			} else {
 				updateBottomTable(shelf);
 			}
 		})
 		
+	} catch (error) {
+		document.getElementById("errorMessage").innerHTML = 'Please select a container to edit!';
+		//console.error(error);
+	}
 }
