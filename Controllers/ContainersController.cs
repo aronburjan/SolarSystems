@@ -73,6 +73,17 @@ namespace SolarSystems.Controllers
             return CreatedAtAction(nameof(GetContainer), new { id = container.Id }, container);
         }
 
+        [HttpPost("{row}/{col}/{shelf}")]
+        public async Task<ActionResult<Container>> GenerateWarehouse(int row, int col, int shelf)
+        {
+            Container container = new Container();
+            container.containerRow= row;
+            container.containerColumn = col;
+            container.containerNumber = shelf;
+            var _container = await _context.AddContainer(container);
+            return CreatedAtAction(nameof(GetContainer), new { id = container.Id }, container);
+        }
+
         // DELETE: api/Containers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteContainer(int id)
