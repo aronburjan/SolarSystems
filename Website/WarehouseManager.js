@@ -74,8 +74,8 @@ function updateComponentList(){
 				//add each component to list
 				data.forEach(item =>{
 					let option = document.createElement("option");
-					option.value = item.id;
-					option.text = item.componentName;
+					option.value = item.componentName;
+					option.text = '(' + item.id + ') ' + item.componentName;
 					componentList.add(option);
 					
 				}); 
@@ -87,7 +87,61 @@ function updateComponentList(){
 
 
 function updateBottomTable(shelf) {
-  console.log("Updating bottom table with data for column " + shelf);
+  console.log("Updating bottom table with data for shelf no. " + shelf);
+  let table = document.getElementById("SelectedShelfTable");
+  //Clear table
+	var r=0;
+	while(row=table.rows[r++])
+	{
+	var c=0; //start counting columns in row
+		while(cell=row.cells[c++])
+		{
+			cell.innerHTML = ' ';
+		}
+	}
+  
+  
+  
+  let address = "https://localhost:7032/api/Containers";
+			let counter = 0;
+			//send GET request
+			fetch(address, {
+				method: "GET"
+			})
+			.then(response => {
+				currentStatus = response.status;
+				console.log('response.status: ', response.status);
+			if (response.ok){
+				return response.json(); 
+			}
+			})
+			.then(data => {
+				//clear table
+				//document.getElementById('SelectedShelfTable').innerHTML = '';
+				//create new table row
+				data.forEach(item =>{
+					let table = document.getElementById("SelectedShelfTable");
+
+					//Fill table 
+					var r=0;
+					while(row=table.rows[r++])
+					{
+						var c=0; //start counting columns in row
+						while(cell=row.cells[c++])
+						{
+							console.log(shelf + ' ' + item.containerNumber + ' ' + r + ' ' + item.containerRow + ' ' + c + ' ' + item.containerColumn);
+							if ((item.containerNumber == shelf) && (item.containerRow == r) && (item.containerColumn == c)){
+								cell.innerHTML='Coord:('+r+','+c+')'+' <br> ID:(' + item.componentId + ') <br> Quantity:' + item.quantityInContainer ; // do sth with cell
+							} 
+						}
+					}
+					
+					
+				}); 
+			})
+			.catch((err) => {
+				console.log(err);
+			});	
 
 }
 
@@ -99,11 +153,11 @@ function addComponent(){
 	
 	let quantity = document.getElementById("quantityInput").value;
     let select = document.getElementById("componentList");
-	let component = select.options[select.selectedIndex].text;
+	let component = select.options[select.selectedIndex].value;
 	console.log(quantity, component);
 	
 	
-	const address = "https://localhost:7032/api/Components/" + component + "/" + shelf + "/" + row + "/" + col + "/" + quantity  
+	const address = "https://localhost:7032/api/Components/" + component + "/" + row + "/" + col + "/" + shelf + "/" + quantity  
 		//send POST request
 		fetch(address, {
 			method: "POST",
