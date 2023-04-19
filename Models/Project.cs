@@ -21,6 +21,8 @@ namespace SolarSystems.Models
         public string? ProjectDescription { get; set; } 
         public string? CustomerName { get; set; }
 
+        public string? CurrentStatus { get; set; } = "New";
+
         //public virtual ICollection<Component> Component { get; set; }
         public ICollection<ProjectStatus>? ProjectStatuses { get; set; }
         public ICollection<Component>? Components { get; set; }

@@ -106,6 +106,7 @@ namespace SolarSystems.Services
 
         public async Task<ActionResult<Project>> CreateNewProject(string ProjectDescription, string ProjectLocation, string CustomerName, int HourlyLaborRate, int LaborTime)
         {
+            ProjectStatusService projectStatusService = new ProjectStatusService(_context);
             Project newProject = new Project
             {
                 ProjectDescription = ProjectDescription,
@@ -118,7 +119,7 @@ namespace SolarSystems.Services
             //set expert id in user table
             _context.Project.Add(newProject);
             await _context.SaveChangesAsync();
-
+            await projectStatusService.AddProjectStatusWithProjectId(newProject.Id);
             return newProject;
         }
 
@@ -144,13 +145,18 @@ namespace SolarSystems.Services
                     project.Value.Components = new List<Component>();
                 }
                 project.Value.Components.Add(component.Value);
+                project.Value.CurrentStatus = "Draft";
                 await this.UpdateProject(projectId, project.Value);
                 var projectStatus = await projectStatusService.GetProjectStatusByProjectId(projectId);
                 await projectStatusService.AddProjectStatusWithProjectId(projectId);
+                projectStatus.Value.status = "Draft";
+                projectStatus.Value.DateTime = DateTime.Now.TimeOfDay.ToString();
+                await projectStatusService.UpdateProjectStatus(projectStatus.Value.Id, projectStatus.Value);
             }
             //remove component that is to be used from the warehouse if avialable
             //todo
             //project status changes to draft
+            
             return project.Value;
         }
     }

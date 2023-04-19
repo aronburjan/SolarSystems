@@ -120,7 +120,7 @@ namespace SolarSystems.Services
             var newProjectStatus = new ProjectStatus
             {
                 DateTime = DateTime.Now.TimeOfDay.ToString(),
-                status = "Draft",
+                status = "New",
                 ProjectId = projectId
             };
             if (project.Value.ProjectStatuses == null)
