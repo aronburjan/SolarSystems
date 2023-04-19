@@ -135,7 +135,7 @@ namespace SolarSystems.Services
             {
                 return Problem("Invalid container.");
             }
-            if(container.Value.ComponentId != component.Value.Id)
+            if(container.Value.ComponentId != component.Value.Id && container.Value.ComponentId != null)
             {
                 return Problem("Container already holds a different type of component");
             }
@@ -146,6 +146,7 @@ namespace SolarSystems.Services
             else
             {
                 container.Value.Component = component.Value;
+                container.Value.ComponentId = component.Value.Id;
                 container.Value.freeSpace -= component.Value.maxStack*quantity;
                 container.Value.quantityInContainer += quantity;
                 await containerService.UpdateContainer(container.Value.Id, container.Value);
