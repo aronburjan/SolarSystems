@@ -73,6 +73,7 @@
 					let cellDescription 	= row.insertCell(2);
 					let cellLtime 			= row.insertCell(3);
 					let cellLrate 			= row.insertCell(4);
+					let cellStatus			= row.insertCell(5);
 					
 					//fill out cell data
 					cellPlace.innerHTML 		= item.projectLocation;
@@ -80,6 +81,7 @@
 					cellDescription.innerHTML 	= item.projectDescription;
 					cellLtime.innerHTML 		= item.laborTime;
 					cellLrate.innerHTML 		= item.hourlyLaborRate;
+					cellStatus.innerHTML 		= item.currentStatus;
 					
 					counter++;
 					}); 
