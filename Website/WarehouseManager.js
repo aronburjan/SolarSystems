@@ -93,7 +93,7 @@ function updateBottomTable(shelf) {
 	var r=0;
 	while(row=table.rows[r++])
 	{
-	var c=0; //start counting columns in row
+	var c=0;
 		while(cell=row.cells[c++])
 		{
 			cell.innerHTML = ' ';
@@ -116,9 +116,6 @@ function updateBottomTable(shelf) {
 			}
 			})
 			.then(data => {
-				//clear table
-				//document.getElementById('SelectedShelfTable').innerHTML = '';
-				//create new table row
 				data.forEach(item =>{
 					let table = document.getElementById("SelectedShelfTable");
 
@@ -126,12 +123,15 @@ function updateBottomTable(shelf) {
 					var r=0;
 					while(row=table.rows[r++])
 					{
-						var c=0; //start counting columns in row
+						var c=0;
 						while(cell=row.cells[c++])
 						{
+							
 							console.log(shelf + ' ' + item.containerNumber + ' ' + r + ' ' + item.containerRow + ' ' + c + ' ' + item.containerColumn);
+							
+							//if cell coords match container coords, add text to cell
 							if ((item.containerNumber == shelf) && (item.containerRow == r) && (item.containerColumn == c)){
-								cell.innerHTML='Coord:('+r+','+c+')'+' <br> ID:(' + item.componentId + ') <br> Quantity:' + item.quantityInContainer ; // do sth with cell
+								cell.innerHTML='Coord:('+r+','+c+')'+' <br> ID:(' + item.componentId + ') <br> Quantity:' + item.quantityInContainer ;
 							} 
 						}
 					}
