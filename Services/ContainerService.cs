@@ -43,7 +43,7 @@ namespace SolarSystems.Services
                     return NotFound();
                 }
                 var container = await _context.Container.Where(a => a.containerRow == containerRow
-                                                          && a.containerColumn == containerRow && a.containerNumber == containerNumber).FirstOrDefaultAsync();
+                                                          && a.containerColumn == containerColumn && a.containerNumber == containerNumber).FirstOrDefaultAsync();
 
                 if (container == null)
                 {
