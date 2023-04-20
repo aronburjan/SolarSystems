@@ -79,7 +79,7 @@ function updateTable() {
 
                 //fill out cell data
                 cellPlace.innerHTML = item.projectLocation;
-                cellCustomer.innerHTML = item.customerName;
+                cellCustomer.innerHTML = item.customerName;	
                 cellDescription.innerHTML = item.projectDescription;
                 cellLtime.innerHTML = item.laborTime;
                 cellLrate.innerHTML = item.hourlyLaborRate;
@@ -112,9 +112,9 @@ function selectRow(row) {
     const id = row.cells[5].textContent;
 
     // display data in selectedRow div
-    document.getElementById("selectedRow").innerHTML = `Place: ${place}, Customer: ${customer}, Description: ${description}, Labor Time: ${lTime}, Hourly Labor Rate: ${lRate},ID: ${id}`;
+    document.getElementById("selectedRow").innerHTML = id;
 
-    addComponentsToProject(id);
+    //addComponentsToProject(id);
 }
 
 
@@ -144,7 +144,8 @@ function displaySelectedRowData() {
     container.appendChild(div);
 }
 
-function addComponentsToProject(projectId) {
+function addComponentsToProject() {
+	let projectId = document.getElementById("selectedRow").innerHTML;
     // get all selected checkboxes and corresponding quantity inputs
     let selectedComponents = [];
     let checkboxes = document.querySelectorAll("input[type='checkbox']");
