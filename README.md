@@ -1,5 +1,4 @@
 # SolarSystems
-random line
 
 Útmutató a projekt teszteléséhez
 
