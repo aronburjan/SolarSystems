@@ -4,9 +4,9 @@
 	<script src="ProjectManager.js"></script>
 	<link rel="stylesheet" href="ProjectManager.css">
 	<script>
-		//if (!sessionStorage.getItem('isLoggedIn')) {
-		//  window.location.href = 'LoginPage.html';
-		//}
+		if (!sessionStorage.getItem('isLoggedIn') || (sessionStorage.getItem('accountType') != 1)) {
+         window.location.href = 'LoginPage.html';
+		}
 		updateTable();
 	</script>
 

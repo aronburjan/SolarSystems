@@ -32,10 +32,28 @@ function validateLogin(){
 			console.log('Response not ok');
 			document.getElementById("errorMessage").innerHTML = "ERROR: " + response.status;
 		} else {
-		sessionStorage.setItem('isLoggedIn', true);
-		window.open(
-			//redirect to next site
-          "ComponentManager.html","_self")
+			response.json().then(data => {
+				sessionStorage.setItem('isLoggedIn', true);
+				sessionStorage.setItem('accountType', data[0].accessLevel);
+				switch(data[0].accessLevel){
+					case 0: 
+						window.open(
+						"ComponentManager.html","_self")
+					break;
+					case 1: 
+						window.open(
+						"ProjectManager.html","_self")
+					break;
+					case 2: 
+						window.open(
+						"WarehouseWorker.html","_self")
+					break;
+					default:
+						console.log('Unknown account type');
+						document.getElementById("errorMessage").innerHTML = "ERROR: Incorrect Account Type";
+					break;
+				}
+			});
 		}
     }) 
     .catch((err) => {

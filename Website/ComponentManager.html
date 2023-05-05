@@ -5,8 +5,8 @@
 	<script src="ComponentManager.js"></script>
 	<link rel="stylesheet" href="ComponentManager.css">
 	<script>
-		if (!sessionStorage.getItem('isLoggedIn')) {
-			window.location.href = 'LoginPage.html';
+		if (!sessionStorage.getItem('isLoggedIn') || (sessionStorage.getItem('accountType') != 0)) {
+         window.location.href = 'LoginPage.html';
 		}
 		updateTable();
 	</script>

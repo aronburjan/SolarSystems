@@ -4,9 +4,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="WarehouseManager.css">
 <script>
-//if (!sessionStorage.getItem('isLoggedIn')) {
-//  window.location.href = 'LoginPage.html';
-//}
+		if (!sessionStorage.getItem('isLoggedIn') || (sessionStorage.getItem('accountType') != 0)) {
+         window.location.href = 'LoginPage.html';
+		}
 </script>
 
 <style>

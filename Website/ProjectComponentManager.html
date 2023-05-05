@@ -6,9 +6,9 @@
     <script src="ProjectComponentManager.js"></script>
     <link rel="stylesheet" href="ProjectComponentManager.css">
     <script>
-        /* if (!sessionStorage.getItem('isLoggedIn')) {
+        if (!sessionStorage.getItem('isLoggedIn') || (sessionStorage.getItem('accountType') != 1)) {
          window.location.href = 'LoginPage.html';
-     }*/
+		}
         updateComponentTable();
         updateTable();
 
