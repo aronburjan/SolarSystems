@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SolarSystems.Models;
 
@@ -11,9 +12,11 @@ using SolarSystems.Models;
 namespace SolarSystems.Migrations
 {
     [DbContext(typeof(SolarSystemsDbContext))]
-    partial class SolarSystemsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230523130808_ProjectComponentModel2")]
+    partial class ProjectComponentModel2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,21 +25,6 @@ namespace SolarSystems.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ComponentProject", b =>
-                {
-                    b.Property<int>("ComponentsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProjectsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ComponentsId", "ProjectsId");
-
-                    b.HasIndex("ProjectsId");
-
-                    b.ToTable("ComponentProject");
-                });
-
             modelBuilder.Entity("SolarSystems.Models.Component", b =>
                 {
                     b.Property<int>("Id")
@@ -44,6 +32,9 @@ namespace SolarSystems.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
 
                     b.Property<string>("componentName")
                         .HasColumnType("nvarchar(max)");
@@ -55,6 +46,8 @@ namespace SolarSystems.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Component");
                 });
@@ -199,19 +192,11 @@ namespace SolarSystems.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ComponentProject", b =>
+            modelBuilder.Entity("SolarSystems.Models.Component", b =>
                 {
-                    b.HasOne("SolarSystems.Models.Component", null)
-                        .WithMany()
-                        .HasForeignKey("ComponentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SolarSystems.Models.Project", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Components")
+                        .HasForeignKey("ProjectId");
                 });
 
             modelBuilder.Entity("SolarSystems.Models.Container", b =>
@@ -269,6 +254,8 @@ namespace SolarSystems.Migrations
 
             modelBuilder.Entity("SolarSystems.Models.Project", b =>
                 {
+                    b.Navigation("Components");
+
                     b.Navigation("ProjectComponents");
 
                     b.Navigation("ProjectStatuses");

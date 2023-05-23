@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace SolarSystems.Models
@@ -9,7 +10,6 @@ namespace SolarSystems.Models
         {
             this.Project = new HashSet<Project>();
         }*/
-
         public int Id { get; set; }
         public string? componentName { get; set; }
         public int maxStack { get; set; }
@@ -20,6 +20,8 @@ namespace SolarSystems.Models
         public virtual ICollection<Container>? Containers { get; set; }
 
         public ICollection<Project>? Projects { get; set; }
+
+        public ICollection<ProjectComponent> ProjectComponents { get; set; }
 
     }
 }

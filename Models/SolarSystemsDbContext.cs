@@ -19,5 +19,13 @@ namespace SolarSystems.Models
         public DbSet<SolarSystems.Models.Container>? Container { get; set; }
 
         public DbSet<SolarSystems.Models.ProjectStatus> ProjectStatus { get; set; }
+
+        public DbSet<SolarSystems.Models.ProjectComponent> ProjectComponent { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProjectComponent>()
+                  .HasKey(m => new { m.ProjectId, m.ComponentId });
+        }
     }
 }

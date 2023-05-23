@@ -145,6 +145,11 @@ namespace SolarSystems.Services
                     project.Value.Components = new List<Component>();
                 }
                 project.Value.Components.Add(component.Value);
+                var projectComponent = new ProjectComponent();
+                projectComponent.Project = project.Value;
+                projectComponent.Component = component.Value;
+                projectComponent.Quantity = componentQuantity;
+                _context.ProjectComponent.Add(projectComponent);
                 project.Value.CurrentStatus = "Draft";
                 await this.UpdateProject(projectId, project.Value);
                 var projectStatus = await projectStatusService.GetProjectStatusByProjectId(projectId);
