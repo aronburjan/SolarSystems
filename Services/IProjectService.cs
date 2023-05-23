@@ -18,7 +18,8 @@ namespace SolarSystems.Services
 
         public  Task<IActionResult> DeleteProject(int id);
 
-        public int GetPriceEstimate(int id);
+
+        public Task<int> GetComponentsPriceEstimate(int id);
         public bool ProjectExists(int id);
     }
 }

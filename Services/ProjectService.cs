@@ -16,7 +16,8 @@ namespace SolarSystems.Services
             _context = context;
         }
 
-        public async Task<ActionResult<IEnumerable<Project>>> GetProject() {
+        public async Task<ActionResult<IEnumerable<Project>>> GetProject()
+        {
             if (_context.Project == null)
             {
                 return NotFound();
@@ -24,7 +25,8 @@ namespace SolarSystems.Services
             return await _context.Project.ToListAsync();
         }
 
-        public async Task<ActionResult<Project>> GetProjectById(int id) {
+        public async Task<ActionResult<Project>> GetProjectById(int id)
+        {
             if (_context.Project == null)
             {
                 return NotFound();
@@ -39,7 +41,8 @@ namespace SolarSystems.Services
             return project;
         }
 
-        public async Task<IActionResult> UpdateProject(int id, Project project) {
+        public async Task<IActionResult> UpdateProject(int id, Project project)
+        {
             if (id != project.Id)
             {
                 return BadRequest();
@@ -66,7 +69,8 @@ namespace SolarSystems.Services
             return NoContent();
         }
 
-        public async Task<ActionResult<Project>> AddProject(Project project) {
+        public async Task<ActionResult<Project>> AddProject(Project project)
+        {
             if (_context.Project == null)
             {
                 return Problem("Entity set 'SolarSystemsDbContext.Project'  is null.");
@@ -77,7 +81,8 @@ namespace SolarSystems.Services
             return CreatedAtAction(nameof(GetProjectById), new { id = project.Id }, project);
         }
 
-        public async Task<IActionResult> DeleteProject(int id) {
+        public async Task<IActionResult> DeleteProject(int id)
+        {
             if (_context.Project == null)
             {
                 return NotFound();
@@ -99,9 +104,32 @@ namespace SolarSystems.Services
             return (_context.Project?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        public int GetPriceEstimate(int id)
+        public async Task<int> GetComponentsPriceEstimate(int id)
         {
-            throw new NotImplementedException();
+            int totalPrice = 0;
+            ProjectComponentService projectComponentService = new ProjectComponentService(_context);
+            ComponentService componentService = new ComponentService(_context);
+            var projectComponents = await _context.ProjectComponent.ToListAsync();
+            var project = this.GetProjectById(id);
+            //add component prices to total price
+            for(int i=0; i<projectComponents.Count; i++)
+            {
+                if (projectComponents[i].ProjectId == id)
+                {
+                    var newComponent = componentService.GetComponentById(projectComponents[i].ComponentId);
+                    totalPrice += newComponent.Result.Value.price * projectComponents[i].Quantity;
+                }
+            }
+            /*foreach(var projectComponentPair in projectComponents.Value)
+            {
+                if(projectComponentPair.ProjectId == id)
+                {
+                    var newComponent = componentService.GetComponentById(projectComponentPair.ComponentId);
+                    totalPrice += newComponent.Result.Value.price * projectComponentPair.Quantity;
+                }
+            }*/
+
+            return totalPrice;
         }
 
         public async Task<ActionResult<Project>> CreateNewProject(string ProjectDescription, string ProjectLocation, string CustomerName, int HourlyLaborRate, int LaborTime)
@@ -110,7 +138,7 @@ namespace SolarSystems.Services
             Project newProject = new Project
             {
                 ProjectDescription = ProjectDescription,
-                ProjectLocation= ProjectLocation,
+                ProjectLocation = ProjectLocation,
                 CustomerName = CustomerName,
                 HourlyLaborRate = HourlyLaborRate,
                 LaborTime = LaborTime
@@ -127,41 +155,58 @@ namespace SolarSystems.Services
         {
             ContainerService containerService = new ContainerService(_context);
             ComponentService componentService = new ComponentService(_context);
+            ProjectComponentService projectComponentService = new ProjectComponentService(_context);
             ProjectStatusService projectStatusService = new ProjectStatusService(_context);
             var component = await componentService.GetComponentById(componentId); //find component by id
-            var project = await this.GetProjectById(projectId) ; //find project by id
+            var project = await this.GetProjectById(projectId); //find project by id
             var numberOfComponentsAvailable = containerService.NumberOfAvailableComponentsById(component.Value.Id); //calculate how many pieces of component is available currently
+            int totalPrice = 0;
             //if there is not enough ordering is possible
-            if(numberOfComponentsAvailable < componentQuantity)
+            //nincs elég komponens -> az árkalkuláció ettől függetlenül elkészülhet, de a projekt
+            //nem kerülhet scheduled statusba
+            //így a projekt wait statusba kerül addig, amíg meg nem érkeznek az alkatrészek
+            //assign components to project
+            if (project.Value.Components == null)
             {
-                //todo
+                // Initialize the Projects collection of chosen expert if it's null
+                project.Value.Components = new List<Component>();
+            }
+
+            project.Value.Components.Add(component.Value);
+            var projectComponent = new ProjectComponent();
+            projectComponent.Project = project.Value;
+            projectComponent.Component = component.Value;
+            projectComponent.Quantity = componentQuantity;
+            await projectComponentService.AddProjectComponent(projectComponent);
+            totalPrice = await GetComponentsPriceEstimate(project.Value.Id);
+            if (project.Value.totalPrice == 0)
+            {
+                totalPrice += project.Value.HourlyLaborRate * project.Value.LaborTime;
+            }
+            project.Value.totalPrice += totalPrice;
+            await this.UpdateProject(projectId, project.Value);
+            var projectStatus = await projectStatusService.GetProjectStatusByProjectId(projectId);
+            await projectStatusService.AddProjectStatusWithProjectId(projectId);
+            if(componentQuantity <= numberOfComponentsAvailable)
+            {
+                project.Value.CurrentStatus = "Scheduled";
+                projectStatus.Value.status = "Scheduled";
             }
             else
             {
-                //assign components to project
-                if (project.Value.Components == null)
-                {
-                    // Initialize the Projects collection of chosen expert if it's null
-                    project.Value.Components = new List<Component>();
-                }
-                project.Value.Components.Add(component.Value);
-                var projectComponent = new ProjectComponent();
-                projectComponent.Project = project.Value;
-                projectComponent.Component = component.Value;
-                projectComponent.Quantity = componentQuantity;
-                _context.ProjectComponent.Add(projectComponent);
-                project.Value.CurrentStatus = "Draft";
-                await this.UpdateProject(projectId, project.Value);
-                var projectStatus = await projectStatusService.GetProjectStatusByProjectId(projectId);
-                await projectStatusService.AddProjectStatusWithProjectId(projectId);
-                projectStatus.Value.status = "Draft";
-                projectStatus.Value.DateTime = DateTime.Now.TimeOfDay.ToString();
-                await projectStatusService.UpdateProjectStatus(projectStatus.Value.Id, projectStatus.Value);
+                project.Value.CurrentStatus = "Wait";
+                projectStatus.Value.status = "Wait";
             }
+            
+            projectStatus.Value.DateTime = DateTime.Now.TimeOfDay.ToString();
+            await projectStatusService.UpdateProjectStatus(projectStatus.Value.Id, projectStatus.Value);
+                
+                
+            
             //remove component that is to be used from the warehouse if avialable
             //todo
             //project status changes to draft
-            
+
             return project.Value;
         }
     }
