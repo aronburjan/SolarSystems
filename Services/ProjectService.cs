@@ -112,7 +112,7 @@ namespace SolarSystems.Services
             var projectComponents = await _context.ProjectComponent.ToListAsync();
             var project = this.GetProjectById(id);
             //add component prices to total price
-            for(int i=0; i<projectComponents.Count; i++)
+            for (int i = 0; i < projectComponents.Count; i++)
             {
                 if (projectComponents[i].ProjectId == id)
                 {
@@ -187,27 +187,52 @@ namespace SolarSystems.Services
             await this.UpdateProject(projectId, project.Value);
             var projectStatus = await projectStatusService.GetProjectStatusByProjectId(projectId);
             await projectStatusService.AddProjectStatusWithProjectId(projectId);
-            if(componentQuantity <= numberOfComponentsAvailable)
+            if (componentQuantity <= numberOfComponentsAvailable)
             {
-                project.Value.CurrentStatus = "Scheduled";
-                projectStatus.Value.status = "Scheduled";
+                await updateStatus(projectId, "Scheduled");
             }
             else
             {
-                project.Value.CurrentStatus = "Wait";
-                projectStatus.Value.status = "Wait";
+                await updateStatus(projectId, "Wait");
             }
-            
+
             projectStatus.Value.DateTime = DateTime.Now.TimeOfDay.ToString();
             await projectStatusService.UpdateProjectStatus(projectStatus.Value.Id, projectStatus.Value);
-                
-                
-            
+
+
+
             //remove component that is to be used from the warehouse if avialable
             //todo
             //project status changes to draft
 
             return project.Value;
+        }
+
+        public async Task updateStatus(int id, string status)
+        {
+            ProjectStatusService projectStatusService = new ProjectStatusService(_context);
+            var project = await this.GetProjectById(id);
+            var projectStatus = await projectStatusService.GetProjectStatusByProjectId(id);
+            if (project == null)
+            {
+                return;
+            }
+            else
+            {
+                project.Value.CurrentStatus = status;
+                projectStatus.Value.status = status;
+            }
+            return;
+        }
+
+        public async Task<ActionResult<IEnumerable<Project>>> getProjectsByStatus(string status)
+        {
+            var projects = await _context.Project.Where(p => p.CurrentStatus.Equals(status)).ToListAsync();
+            if(projects != null)
+            {
+                return projects;
+            }
+            return NoContent();
         }
     }
 }

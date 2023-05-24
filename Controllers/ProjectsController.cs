@@ -38,6 +38,12 @@ namespace SolarSystems.Controllers
            
         }
 
+        [HttpGet("/status/{status}")]
+        public async Task<ActionResult<IEnumerable<Project>>> GetProjectsByStatus(string status)
+        {
+            return await _context.getProjectsByStatus(status);
+        }
+
         // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
