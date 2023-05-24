@@ -13,6 +13,8 @@ namespace SolarSystems.Services
 
         public Task<ActionResult<IEnumerable<Component>>> ListAvailableComponents();
 
+        public Task removeComponentsFromContaienr(int componentId, int quantity);
+
         public int NumberOfAvailableComponentsById(int id);
         public Task<ActionResult<Container>> AddContainer(Container container);
 

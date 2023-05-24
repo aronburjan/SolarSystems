@@ -196,8 +196,7 @@ namespace SolarSystems.Services
                 await updateStatus(projectId, "Wait");
             }
 
-            projectStatus.Value.DateTime = DateTime.Now.TimeOfDay.ToString();
-            await projectStatusService.UpdateProjectStatus(projectStatus.Value.Id, projectStatus.Value);
+            
 
 
 
@@ -221,18 +220,45 @@ namespace SolarSystems.Services
             {
                 project.Value.CurrentStatus = status;
                 projectStatus.Value.status = status;
+                projectStatus.Value.DateTime = DateTime.Now.TimeOfDay.ToString();
+                await projectStatusService.UpdateProjectStatus(projectStatus.Value.Id, projectStatus.Value);
             }
+            await _context.SaveChangesAsync();
             return;
         }
 
         public async Task<ActionResult<IEnumerable<Project>>> getProjectsByStatus(string status)
         {
             var projects = await _context.Project.Where(p => p.CurrentStatus.Equals(status)).ToListAsync();
-            if(projects != null)
+            ContainerService containerService = new ContainerService(_context);
+            ComponentService componentService = new ComponentService(_context);
+            if (projects != null)
             {
                 return projects;
             }
             return NoContent();
+        }
+
+        public async Task getComponentsForProject(int projectId)
+        {
+            ContainerService containerService = new ContainerService(_context);
+            ComponentService componentService = new ComponentService(_context);
+            var project = await GetProjectById(projectId);
+            //get list of components associated with project
+            var projectComponents = await _context.ProjectComponent.ToListAsync();
+            for(int i=0; i<projectComponents.Count; i++)
+            {
+                if (projectComponents[i].ProjectId == projectId)
+                {
+                    var newComponent = await componentService.GetComponentById(projectComponents[i].ComponentId);
+                    await containerService.removeComponentsFromContaienr(newComponent.Value.Id, projectComponents[i].Quantity);
+                }
+            }
+            await updateStatus(projectId, "In Progress");
+            return;
+            //get project
+            //remove components associated with the project from the warehouse
+            //set project status to In progress
         }
     }
 }

@@ -54,6 +54,13 @@ namespace SolarSystems.Controllers
             
         }
 
+        [HttpPost("take/components/for/{id}")]
+        public async Task takeComponentsForProject(int id)
+        {
+            await _context.getComponentsForProject(id);
+            return;
+        }
+
         // POST: api/Projects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
