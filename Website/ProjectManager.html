@@ -4,9 +4,9 @@
 	<script src="ProjectManager.js"></script>
 	<link rel="stylesheet" href="ProjectManager.css">
 	<script>
-		if (!sessionStorage.getItem('isLoggedIn') || (sessionStorage.getItem('accountType') != 1)) {
-         window.location.href = 'LoginPage.html';
-		}
+        if (!sessionStorage.getItem('isLoggedIn') || (sessionStorage.getItem('accountType') != 1)) {
+            window.location.href = 'LoginPage.html';
+        }
 		updateTable();
 	</script>
 
@@ -31,6 +31,7 @@
 					<th>Labor Time</th>
 					<th>Hourly Labor Rate</th>
 					<th>Current Status</th>
+					<th>Total Price</th>
 				</tr>
 			</thead>
 			<tbody id="projectTable">
@@ -52,12 +53,12 @@
 			<label for="projectDescriptionInput">Description:</label>
 			<input type="text" id="projectDescriptionInput" name="projectDescriptionInput">
 			<br>
-			<label for="laborTimeInput">labor time:</label>
+			<label for="laborTimeInput">Labor time:</label>
 			<input type="number" id="laborTimeInput" name="laborTimeInput">
 			<br>
-			<label for="hourlyLaborRateInput">hourly labor rate:</label>
+			<label for="hourlyLaborRateInput">Hourly labor rate:</label>
 			<input type="number" id="hourlyLaborRateInput" name="hourlyLaborRateInput">
-
+		
 
 
 

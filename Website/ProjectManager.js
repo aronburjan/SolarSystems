@@ -4,10 +4,11 @@
 			const customer 		= document.getElementById("customerNameInput").value;
 			const description 	= document.getElementById("projectDescriptionInput").value;
 			const ltime 		= document.getElementById("laborTimeInput").value;
-			const lrate 		= document.getElementById("hourlyLaborRateInput").value;
-			const address 		= "https://localhost:7032/api/Projects/"+description+"/"+place+"/"+customer+"/"+lrate+"/"+ltime
+			const lrate = document.getElementById("hourlyLaborRateInput").value;
+			//const totalprice = document.getElementById("totalPriceInput").value;
+		const address = "https://localhost:7032/api/Projects/" + description + "/" + place + "/" + customer + "/" + lrate + "/" + ltime;
 			//send POST request
-			console.log("Adding Project:",place, customer, description, ltime, lrate, address);
+		console.log("Adding Project:", place, customer, description, ltime, lrate, address);
 			fetch(address, 
 				{
 					method: "POST",
@@ -73,7 +74,8 @@
 					let cellDescription 	= row.insertCell(2);
 					let cellLtime 			= row.insertCell(3);
 					let cellLrate 			= row.insertCell(4);
-					let cellStatus			= row.insertCell(5);
+					let cellStatus = row.insertCell(5);
+					let cellTotalPrice = row.insertCell(6);
 					
 					//fill out cell data
 					cellPlace.innerHTML 		= item.projectLocation;
@@ -81,8 +83,8 @@
 					cellDescription.innerHTML 	= item.projectDescription;
 					cellLtime.innerHTML 		= item.laborTime;
 					cellLrate.innerHTML 		= item.hourlyLaborRate;
-					cellStatus.innerHTML 		= item.currentStatus;
-					
+					cellStatus.innerHTML = item.currentStatus;
+					cellTotalPrice.innerHTML = item.totalPrice;
 					counter++;
 					}); 
 				})
