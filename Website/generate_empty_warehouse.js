@@ -4,7 +4,7 @@ async function addContainers() {
       for (let r = 1; r <= 4; r++) {
         const address = "https://localhost:7032/api/Containers/" + r + "/" + c + "/" + s;
         // send POST request
-        console.log("Adding container:", r, c, s);
+        console.log("Adding container:", s, c, r);
 
         try {
           const response = await fetch(address, {
