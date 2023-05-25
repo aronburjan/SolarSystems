@@ -1,0 +1,15 @@
+table{
+	border: 1px solid black;
+}
+
+.selected{
+	background-color: yellow;
+}
+
+tr:not(.selected):nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:not(.selected):nth-child(odd) {
+  background-color: #fff;
+}

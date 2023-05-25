@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="RoutePlanner.js"></script>
+	<link rel="stylesheet" href="RoutePlanner.css">
+	<script>
+	/*
+        if (!sessionStorage.getItem('isLoggedIn') || (sessionStorage.getItem('accountType') != 2)) {
+            window.location.href = 'LoginPage.html';
+        }
+	*/
+		updateTable();
+	
+	</script>
+
+</head>
+
+
+
+<body>
+
+    <h1>Scheduled Projects</h1>
+
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<th>Place</th>
+					<th>Customer</th>
+					<th>Description</th>
+					<th>Labor Time</th>
+					<th>Hourly Labor Rate</th>
+					<th>Current Status</th>
+					<th>Total Price</th>
+				</tr>
+			</thead>
+			<tbody id="projectTable">
+			</tbody>
+		</table>
+
+
+	</div>
+	<br>
+	
+	<div>
+		<button onclick="planRoute()">Plan Route</button>
+		<div id="routeDisplay"></div>
+	</div>
+
+</body>
+</html>
