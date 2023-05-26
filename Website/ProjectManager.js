@@ -8,7 +8,7 @@
 			//const totalprice = document.getElementById("totalPriceInput").value;
 		const address = "https://localhost:7032/api/Projects/" + description + "/" + place + "/" + customer + "/" + lrate + "/" + ltime;
 			//send POST request
-		console.log("Adding Project:", place, customer, description, ltime, lrate, address);
+		console.log("Adding Project:", place, customer, description, ltime, lrate, address); 
 			fetch(address, 
 				{
 					method: "POST",
