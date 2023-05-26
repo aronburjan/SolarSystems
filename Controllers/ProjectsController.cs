@@ -44,7 +44,7 @@ namespace SolarSystems.Controllers
             return await _context.getProjectsByStatus(status);
         }
 
-        [HttpGet("/estimate/{id}")]
+        [HttpGet("estimate/{id}")]
         public async Task estimatePrice(int id)
         {
             await _context.estimatePrice(id);
@@ -59,6 +59,12 @@ namespace SolarSystems.Controllers
             var _project = await _context.UpdateProject(id, project);
             return _project;
             
+        }
+
+        [HttpPut("set/status/{id}/{status}")]
+        public async Task setStatus(int id, string status)
+        {
+            await _context.updateStatus(id, status);
         }
 
         [HttpPost("take/components/for/{id}")]

@@ -245,7 +245,7 @@ namespace SolarSystems.Services
             var project = await GetProjectById(projectId);
             //get list of components associated with project
             var projectComponents = await _context.ProjectComponent.ToListAsync();
-            for(int i=0; i<projectComponents.Count; i++)
+            for (int i=0; i<projectComponents.Count; i++)
             {
                 if (projectComponents[i].ProjectId == projectId)
                 {
