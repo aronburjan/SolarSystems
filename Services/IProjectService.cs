@@ -24,7 +24,7 @@ namespace SolarSystems.Services
 
         public Task getComponentsForProject(int projectId);
 
-        public Task<int> GetComponentsPriceEstimate(int id);
+        public Task estimatePrice(int id);
         public bool ProjectExists(int id);
     }
 }

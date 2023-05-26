@@ -44,6 +44,13 @@ namespace SolarSystems.Controllers
             return await _context.getProjectsByStatus(status);
         }
 
+        [HttpGet("/estimate/{id}")]
+        public async Task estimatePrice(int id)
+        {
+            await _context.estimatePrice(id);
+            return;
+        }
+
         // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

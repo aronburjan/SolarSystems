@@ -27,6 +27,8 @@ namespace SolarSystems.Models
 
         public int? totalPrice { get; set; } = 0;
 
+        public bool canBeScheduled { get; set; } = false;
+
         //public virtual ICollection<Component> Component { get; set; }
         public ICollection<ProjectStatus>? ProjectStatuses { get; set; }
         public ICollection<Component>? Components { get; set; }

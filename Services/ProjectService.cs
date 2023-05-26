@@ -104,13 +104,14 @@ namespace SolarSystems.Services
             return (_context.Project?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        public async Task<int> GetComponentsPriceEstimate(int id)
+        public async Task estimatePrice(int id)
         {
             int totalPrice = 0;
             ProjectComponentService projectComponentService = new ProjectComponentService(_context);
             ComponentService componentService = new ComponentService(_context);
             var projectComponents = await _context.ProjectComponent.ToListAsync();
-            var project = this.GetProjectById(id);
+            var project = await GetProjectById(id);
+            var componentsOfProject = project.Value.Components;
             //add component prices to total price
             for (int i = 0; i < projectComponents.Count; i++)
             {
@@ -120,16 +121,22 @@ namespace SolarSystems.Services
                     totalPrice += newComponent.Result.Value.price * projectComponents[i].Quantity;
                 }
             }
-            /*foreach(var projectComponentPair in projectComponents.Value)
+            if(project.Value.totalPrice == 0)
             {
-                if(projectComponentPair.ProjectId == id)
-                {
-                    var newComponent = componentService.GetComponentById(projectComponentPair.ComponentId);
-                    totalPrice += newComponent.Result.Value.price * projectComponentPair.Quantity;
-                }
-            }*/
+                totalPrice += project.Value.LaborTime * project.Value.HourlyLaborRate;
+            }
+            project.Value.totalPrice = totalPrice;
+            if (project.Value.canBeScheduled == true)
+            {
+                await updateStatus(project.Value.Id, "Scheduled");
+            }
+            else
+            {
+                await updateStatus(project.Value.Id, "Wait");
+            }
+            await _context.SaveChangesAsync();
 
-            return totalPrice;
+            return;
         }
 
         public async Task<ActionResult<Project>> CreateNewProject(string ProjectDescription, string ProjectLocation, string CustomerName, int HourlyLaborRate, int LaborTime)
@@ -160,7 +167,6 @@ namespace SolarSystems.Services
             var component = await componentService.GetComponentById(componentId); //find component by id
             var project = await this.GetProjectById(projectId); //find project by id
             var numberOfComponentsAvailable = containerService.NumberOfAvailableComponentsById(component.Value.Id); //calculate how many pieces of component is available currently
-            int totalPrice = 0;
             //if there is not enough ordering is possible
             //nincs elég komponens -> az árkalkuláció ettől függetlenül elkészülhet, de a projekt
             //nem kerülhet scheduled statusba
@@ -178,27 +184,20 @@ namespace SolarSystems.Services
             projectComponent.Component = component.Value;
             projectComponent.Quantity = componentQuantity;
             await projectComponentService.AddProjectComponent(projectComponent);
-            totalPrice = await GetComponentsPriceEstimate(project.Value.Id);
-            if (project.Value.totalPrice == 0)
-            {
-                totalPrice += project.Value.HourlyLaborRate * project.Value.LaborTime;
-            }
-            project.Value.totalPrice += totalPrice;
             await this.UpdateProject(projectId, project.Value);
             var projectStatus = await projectStatusService.GetProjectStatusByProjectId(projectId);
             await projectStatusService.AddProjectStatusWithProjectId(projectId);
             if (componentQuantity <= numberOfComponentsAvailable)
             {
-                await updateStatus(projectId, "Scheduled");
+                project.Value.canBeScheduled = true;
+                await _context.SaveChangesAsync();
             }
             else
             {
-                await updateStatus(projectId, "Wait");
+                project.Value.canBeScheduled = false;
+                await _context.SaveChangesAsync();
             }
-
-            
-
-
+            await updateStatus(projectId, "Draft");
 
             //remove component that is to be used from the warehouse if avialable
             //todo
@@ -260,5 +259,6 @@ namespace SolarSystems.Services
             //remove components associated with the project from the warehouse
             //set project status to In progress
         }
+
     }
 }
