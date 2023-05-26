@@ -1,4 +1,4 @@
-﻿/* Top bar */
+/* Top bar */
 .topbar {
     background-color: #333;
     overflow: hidden;
@@ -40,9 +40,18 @@ th {
     color: white;
 }
 
-tr:nth-child(even) {
-    background-color: #f2f2f2
+.selected{
+	background-color: yellow;
 }
+
+tr:not(.selected):nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:not(.selected):nth-child(odd) {
+  background-color: #fff;
+}
+
 
 /* Form */
 .outerdiv {
@@ -79,3 +88,8 @@ button[type=submit] {
     button[type=submit]:hover {
         background-color: #45a049;
     }
+
+.errorMessage {
+	color: red;
+	text-align: center;
+}
