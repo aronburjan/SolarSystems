@@ -57,6 +57,12 @@ namespace SolarSystems.Controllers
             return await _context.listProjectComponentInfo(id);
         }
 
+        [HttpGet("project/missingcomponents")]
+        public async Task<ActionResult<IEnumerable<Models.Component>>> getMissingComponents()
+        {
+            return await _context.getMissingComponents();
+        }
+
         // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

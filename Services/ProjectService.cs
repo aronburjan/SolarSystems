@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Versioning;
+using SolarSystems.Migrations;
 using SolarSystems.Models;
 using System.ComponentModel;
 using System.Composition;
@@ -299,6 +300,35 @@ namespace SolarSystems.Services
                 containersOfInterest.Add(newContainer.Value);
             }
             return containersOfInterest;
+        }
+
+        public async Task<ActionResult<IEnumerable<Models.Component>>> getMissingComponents()
+        {
+            var waitProjects = await getProjectsByStatus("Wait");
+            var projectComponentsTable = await _context.ProjectComponent.ToListAsync();
+            var componentsTable = await _context.Component.ToListAsync();
+            List<Models.Component> missingComponents = new List<Models.Component>();
+            foreach(var project in waitProjects.Value)
+            {
+               for(int i=0; i<projectComponentsTable.Count; i++)
+                {
+                    if (projectComponentsTable[i].ProjectId == project.Id)
+                    {
+                        for(int j=0; j<componentsTable.Count; j++)
+                        {
+                            if (componentsTable[j].Id == projectComponentsTable[i].ComponentId && (componentsTable[j].available - projectComponentsTable[i].Quantity) < 0)
+                            {
+                                if (!missingComponents.Contains(componentsTable[j]))
+                                {
+                                    missingComponents.Add(componentsTable[j]);
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+            return missingComponents;
         }
     }
 }
