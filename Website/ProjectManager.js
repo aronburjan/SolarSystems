@@ -8,7 +8,7 @@
 			//const totalprice = document.getElementById("totalPriceInput").value;
 		const address = "https://localhost:7032/api/Projects/" + description + "/" + place + "/" + customer + "/" + lrate + "/" + ltime;
 			//send POST request
-		console.log("Adding Project:", place, customer, description, ltime, lrate, address); 
+		console.log("Adding Project:", place, customer, description, ltime, lrate, address);
 			fetch(address, 
 				{
 					method: "POST",
@@ -131,12 +131,12 @@ function doPriceCalc(){
 	fetch(address)
 		.then(response => response.json())
 		.then(data => {
-			if (data.currentStatus != "Draft") {
-				console.log("selected project is not Draft (or no project is selected)");
-				document.getElementById("errorMessage").innerHTML = "To do price calculation, select a project that is in Draft status!";
+			if ((data.currentStatus != "Draft") && (data.currentStatus != "Wait")) {
+				console.log("selected project is not Draft/Wait (or no project is selected)");
+				document.getElementById("errorMessage").innerHTML = "To do price calculation, select a project that is in Draft or Wait status!";
 			} else {
 				
-				const estimateAddress = "https://localhost:7032/estimate/" + projectID;
+				const estimateAddress = "https://localhost:7032/api/Projects/estimate/" + projectID;
 
 				fetch(estimateAddress, {
 					method: 'GET'
