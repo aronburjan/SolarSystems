@@ -149,6 +149,7 @@ namespace SolarSystems.Services
             }
             else
             {
+                component.Value.available += quantity;
                 container.Value.Component = component.Value;
                 container.Value.ComponentId = component.Value.Id;
                 container.Value.freeSpace -= component.Value.maxStack*quantity;

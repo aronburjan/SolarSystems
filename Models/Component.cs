@@ -16,12 +16,14 @@ namespace SolarSystems.Models
 
         public int price { get; set; }
 
+        public int available { get; set; } = 0;
+
         [JsonIgnore]
         public virtual ICollection<Container>? Containers { get; set; }
 
         public ICollection<Project>? Projects { get; set; }
         [JsonIgnore] //this may or may not break something
-        public ICollection<ProjectComponent> ProjectComponents { get; set; }
+        public ICollection<ProjectComponent>? ProjectComponents { get; set; }
 
     }
 }

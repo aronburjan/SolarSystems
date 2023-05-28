@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using NuGet.Versioning;
 using SolarSystems.Models;
+using System.ComponentModel;
 using System.Composition;
 
 namespace SolarSystems.Services
@@ -110,15 +111,28 @@ namespace SolarSystems.Services
             ProjectComponentService projectComponentService = new ProjectComponentService(_context);
             ComponentService componentService = new ComponentService(_context);
             var projectComponents = await _context.ProjectComponent.ToListAsync();
+            var componentsTable = await _context.Component.ToListAsync();
             var project = await GetProjectById(id);
             var componentsOfProject = project.Value.Components;
+            List<Models.Component> listOfComponents = new List<Models.Component>();
             //add component prices to total price
             for (int i = 0; i < projectComponents.Count; i++)
             {
                 if (projectComponents[i].ProjectId == id)
                 {
-                    var newComponent = componentService.GetComponentById(projectComponents[i].ComponentId);
-                    totalPrice += newComponent.Result.Value.price * projectComponents[i].Quantity;
+                    var newComponent = await componentService.GetComponentById(projectComponents[i].ComponentId);
+                    totalPrice += newComponent.Value.price * projectComponents[i].Quantity;
+                    if(project.Value.canBeScheduled == true)
+                    {
+                        for(int j=0; j<componentsTable.Count; j++)
+                        {
+                            if (componentsTable[j].Id == newComponent.Value.Id)
+                            {
+                                componentsTable[j].available -= projectComponents[i].Quantity;
+
+                            }
+                        }
+                    }
                 }
             }
             if(project.Value.totalPrice == 0)
@@ -128,6 +142,7 @@ namespace SolarSystems.Services
             project.Value.totalPrice = totalPrice;
             if (project.Value.canBeScheduled == true)
             {
+                
                 await updateStatus(project.Value.Id, "Scheduled");
             }
             else
@@ -175,7 +190,7 @@ namespace SolarSystems.Services
             if (project.Value.Components == null)
             {
                 // Initialize the Projects collection of chosen expert if it's null
-                project.Value.Components = new List<Component>();
+                project.Value.Components = new List<Models.Component>();
             }
 
             project.Value.Components.Add(component.Value);
@@ -260,15 +275,15 @@ namespace SolarSystems.Services
             //set project status to In progress
         }
 
-        public async Task<List<Container>> listProjectComponentInfo(int projectId)
+        public async Task<List<Models.Container>> listProjectComponentInfo(int projectId)
         {
             ContainerService containerService = new ContainerService(_context);
             ProjectComponentService projectComponentService = new ProjectComponentService(_context);
             ComponentService componentService = new ComponentService(_context);
             var projectComponents = await _context.ProjectComponent.ToListAsync();
             var containers = await _context.Container.ToListAsync();
-            List<Container> containersOfInterest = new List<Container>();
-            List<Component> componentsOfInterest = new List<Component>();
+            List<Models.Container> containersOfInterest = new List<Models.Container>();
+            List<Models.Component> componentsOfInterest = new List<Models.Component>();
             for(int i=0; i<projectComponents.Count; i++)
             {
                 if (projectComponents[i].ProjectId == projectId)
