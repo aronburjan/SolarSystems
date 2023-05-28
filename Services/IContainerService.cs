@@ -15,6 +15,8 @@ namespace SolarSystems.Services
 
         public Task removeComponentsFromContaienr(int componentId, int quantity);
 
+        public Task<ActionResult<Container>> GetContainerByComponentId(int componentId);
+
         public int NumberOfAvailableComponentsById(int id);
         public Task<ActionResult<Container>> AddContainer(Container container);
 

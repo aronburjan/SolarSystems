@@ -20,7 +20,7 @@ namespace SolarSystems.Models
         public virtual ICollection<Container>? Containers { get; set; }
 
         public ICollection<Project>? Projects { get; set; }
-
+        [JsonIgnore] //this may or may not break something
         public ICollection<ProjectComponent> ProjectComponents { get; set; }
 
     }

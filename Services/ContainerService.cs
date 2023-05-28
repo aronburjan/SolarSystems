@@ -190,5 +190,12 @@ namespace SolarSystems.Services
             return;
         }
 
+        public async Task<ActionResult<Container>> GetContainerByComponentId(int componentId)
+        {
+            var containerHoldingComponent = await _context.Container.Include(c => c.Component) // Explicitly include the Component objects
+                                                             .Where(c => c.Component.Id == componentId)
+                                                             .FirstOrDefaultAsync();
+            return containerHoldingComponent;
+        }
     }
 }

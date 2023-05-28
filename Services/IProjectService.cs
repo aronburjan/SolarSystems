@@ -22,6 +22,8 @@ namespace SolarSystems.Services
 
         public Task<ActionResult<IEnumerable<Project>>> getProjectsByStatus(string status);
 
+        public Task<List<Container>> listProjectComponentInfo(int projectId);
+
         public Task getComponentsForProject(int projectId);
 
         public Task estimatePrice(int id);

@@ -33,9 +33,9 @@ namespace SolarSystems.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Project>> GetProject(int id)
         {
-            var project =  await _context.GetProjectById(id);
+            var project = await _context.GetProjectById(id);
             return project;
-           
+
         }
 
         [HttpGet("/status/{status}")]
@@ -49,6 +49,12 @@ namespace SolarSystems.Controllers
         {
             await _context.estimatePrice(id);
             return;
+        }
+
+        [HttpGet("project/component/info/{id}")]
+        public async Task<ActionResult<IEnumerable<Models.Container>>> getProjectComponentInfo(int id)
+        {
+            return await _context.listProjectComponentInfo(id);
         }
 
         // PUT: api/Projects/5

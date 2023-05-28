@@ -260,5 +260,30 @@ namespace SolarSystems.Services
             //set project status to In progress
         }
 
+        public async Task<List<Container>> listProjectComponentInfo(int projectId)
+        {
+            ContainerService containerService = new ContainerService(_context);
+            ProjectComponentService projectComponentService = new ProjectComponentService(_context);
+            ComponentService componentService = new ComponentService(_context);
+            var projectComponents = await _context.ProjectComponent.ToListAsync();
+            var containers = await _context.Container.ToListAsync();
+            List<Container> containersOfInterest = new List<Container>();
+            List<Component> componentsOfInterest = new List<Component>();
+            for(int i=0; i<projectComponents.Count; i++)
+            {
+                if (projectComponents[i].ProjectId == projectId)
+                {
+                    var newComponent = await componentService.GetComponentById(projectComponents[i].ComponentId);
+                    componentsOfInterest.Add(newComponent.Value);
+                    
+                }
+            }
+            foreach(var component in componentsOfInterest)
+            {
+                var newContainer = await containerService.GetContainerByComponentId(component.Id);
+                containersOfInterest.Add(newContainer.Value);
+            }
+            return containersOfInterest;
+        }
     }
 }
