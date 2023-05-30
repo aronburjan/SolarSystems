@@ -283,23 +283,28 @@ namespace SolarSystems.Services
             ComponentService componentService = new ComponentService(_context);
             var projectComponents = await _context.ProjectComponent.ToListAsync();
             var containers = await _context.Container.ToListAsync();
-            List<Models.Container> containersOfInterest = new List<Models.Container>();
+            List<Models.Container> resultContainers = new List<Models.Container>();
             List<Models.Component> componentsOfInterest = new List<Models.Component>();
-            for(int i=0; i<projectComponents.Count; i++)
+            //Dictionary<Models.Component, int> componentsOfInterest = new Dictionary<Models.Component, int>();
+            int neededQuantity;
+            foreach(var projectComponent in projectComponents)
             {
-                if (projectComponents[i].ProjectId == projectId)
+                if(projectComponent.ProjectId == projectId)
                 {
-                    var newComponent = await componentService.GetComponentById(projectComponents[i].ComponentId);
-                    componentsOfInterest.Add(newComponent.Value);
-                    
+                    neededQuantity = projectComponent.Quantity;
+                    var containerList = await containerService.GetContainersByComponentId(projectComponent.ComponentId);
+                    foreach(var container in containerList.Value)
+                    {
+                        if(neededQuantity > 0)
+                        {
+                            neededQuantity -= container.quantityInContainer;
+                            resultContainers.Add(container);
+                        }
+                    }
                 }
             }
-            foreach(var component in componentsOfInterest)
-            {
-                var newContainer = await containerService.GetContainerByComponentId(component.Id);
-                containersOfInterest.Add(newContainer.Value);
-            }
-            return containersOfInterest;
+            
+            return resultContainers;
         }
 
         public async Task<ActionResult<IEnumerable<Models.Component>>> getMissingComponents()

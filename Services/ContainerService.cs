@@ -165,7 +165,7 @@ namespace SolarSystems.Services
                                                              .ToListAsync();
             for (int i = 0; i < containersHoldingComponent.Count; i++)
             {
-                if(quantity == 0)
+                if (quantity == 0)
                 {
                     await _context.SaveChangesAsync();
                     return;
@@ -190,11 +190,11 @@ namespace SolarSystems.Services
             return;
         }
 
-        public async Task<ActionResult<Container>> GetContainerByComponentId(int componentId)
+        public async Task<ActionResult<IEnumerable< Container>>> GetContainersByComponentId(int componentId)
         {
             var containerHoldingComponent = await _context.Container.Include(c => c.Component) // Explicitly include the Component objects
                                                              .Where(c => c.Component.Id == componentId)
-                                                             .FirstOrDefaultAsync();
+                                                             .ToListAsync();
             return containerHoldingComponent;
         }
     }
