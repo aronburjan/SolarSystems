@@ -1,5 +1,5 @@
 function updateTable(){
-			let address = "https://localhost:7032/status/new";
+			let address = "https://localhost:7032/status/Scheduled";
 			let counter = 0;
 			//send GET request
 			fetch(address, {
@@ -50,7 +50,8 @@ function updateTable(){
 				console.log(err);
 			});	
 		}
-		
+	
+/*	
 async function planRoute(){
 	output = ""; 
 	
@@ -96,6 +97,7 @@ async function planRoute(){
 	document.getElementById('routeDisplay').innerHTML = 'selected project: ' + getSelectedID() + ' <br>' + output;
 	
 }
+*/
 
 function selectRow(r){
 	const table = document.getElementById("projectTable");
@@ -120,4 +122,98 @@ function getSelectedID() {
   }
   
   return null; // Return null if no selected row
+}
+
+async function planRoute(){
+	const projectID = getSelectedID();
+	const output = document.getElementById("routeDisplay");
+	//reset output
+	output.innerHTML = "";
+	
+	if (projectID == null){
+		output.innerHTML = "Please select a project!"
+	} else {
+
+		//display required components name + amount
+		output.innerHTML += "Required components: <br>";
+		try {
+			const response = await fetch("https://localhost:7032/api/projectComponents/" + projectID);
+			const projectComponents = await response.json();
+
+			for (const projectComponent of projectComponents) {
+				const componentID = projectComponent.componentId;
+				const componentResponse = await fetch("https://localhost:7032/api/components/" + componentID);
+				const component = await componentResponse.json();
+
+				output.innerHTML += component.componentName + " x " + projectComponent.quantity + " <br>";
+				
+			}
+		} catch (error) {
+			console.error('Error:', error);
+		}
+
+		//display route
+		output.innerHTML += "Route: <br>";
+		const routeAddress = "https://localhost:7032/api/Projects/project/component/info/" + projectID;
+		
+			fetch(routeAddress, {
+					method: "GET"
+				})
+				.then(response => {
+					currentStatus = response.status;
+					console.log('response.status: ', response.status);
+				if (response.ok){
+					return response.json(); 
+				}
+				})
+				.then(data => {
+
+					data.forEach(item =>{
+						output.innerHTML += 
+							"Shelf " + item.containerNumber + ", " +
+							"Column " + item.containerColumn + ", " +
+							"Row " + item.containerRow + ": " +
+							item.component.componentName + " <br>";
+					}); 
+					//display button to take the items
+					output.innerHTML += '<button onclick="takeItems()">Finished Collecting Components</button>';
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+
+	}
+}
+
+function takeItems(){
+	const projectID = getSelectedID();
+	//take components from warehouse
+	const address = "https://localhost:7032/api/Projects/take/components/for/" + projectID;
+		fetch(address, {
+				method: "POST"
+			})
+			.then(response => {
+				currentStatus = response.status;
+				console.log('response.status: ', response.status);
+			if (response.ok){
+				//set project status to inProgress
+				
+				const statusAddress = "https://localhost:7032/api/Projects/set/status/" + projectID + "/inProgress";
+					fetch(closeAddress, {
+						method: 'PUT'
+					})
+					.then(() => {
+						console.log("set project  " + projectID + "  to inProgress ");
+					})
+					.catch(error => {
+						console.error('Error:', error);
+					});
+				
+			}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
+	updateTable();
 }
