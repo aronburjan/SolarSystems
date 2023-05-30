@@ -175,3 +175,30 @@ function addComponent(){
 		//console.error(error);
 	}
 }
+
+function listMissing(){
+	missingList = document.getElementById("missingList");
+	const address = "https://localhost:7032/api/Projects/project/missingcomponents"
+	missingList.innerHTML = "";
+	
+	fetch(address, {
+			method: "GET",
+		})
+		.then(response => {
+				currentStatus = response.status;
+				console.log('response.status: ', response.status);
+			if (response.ok){
+				return response.json(); 
+			}
+			})
+			.then(data => {
+				data.forEach(item =>{
+					missingList.innerHTML += "(" + item.id + ") " + item.componentName + " <br>"; 
+				});
+			})
+			.catch((err) => {
+				console.log(err);
+			});	
+
+	
+}

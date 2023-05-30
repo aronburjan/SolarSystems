@@ -180,4 +180,7 @@ function addComponentsToProject() {
                 console.log(err);
             });
     });
+	
+	//call updateComponentTable to reset inputs --this is not optimal but makes ui more understandable
+	updateComponentTable();
 }
