@@ -9,6 +9,7 @@ builder.Services.AddScoped<IContainerService, ContainerService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectStatusService, ProjectStatusService>();
+builder.Services.AddScoped<IProjectComponentService, ProjectComponentService>();
 
 
 //ennek a mintájára a többi service

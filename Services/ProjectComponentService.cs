@@ -20,6 +20,20 @@ namespace SolarSystems.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<ActionResult<IEnumerable< ProjectComponent>>> GetProjectComponent(int id)
+        {
+            var projectComponents = await GetProjectComponents();
+            List<ProjectComponent> projectComponentsOfProject = new List<ProjectComponent>();
+            foreach (var projectComponent in projectComponents.Value)
+            {
+                if(projectComponent.ProjectId == id)
+                {
+                    projectComponentsOfProject.Add(projectComponent);
+                }
+            }
+            return projectComponentsOfProject;
+        }
+
         public async Task<ActionResult<IEnumerable<ProjectComponent>>> GetProjectComponents()
         {
             var projectComponents = await _context.ProjectComponent.ToListAsync();

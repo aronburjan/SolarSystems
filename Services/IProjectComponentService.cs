@@ -8,5 +8,7 @@ namespace SolarSystems.Services
         public Task AddProjectComponent(ProjectComponent projectComponent);
 
         public Task<ActionResult<IEnumerable<ProjectComponent>>> GetProjectComponents();
+
+        public Task<ActionResult<IEnumerable<ProjectComponent>>> GetProjectComponent(int id);
     }
 }
