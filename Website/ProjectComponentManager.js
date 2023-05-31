@@ -66,6 +66,7 @@ function updateTable() {
             document.getElementById('projectTable').innerHTML = '';
             //create new table row
             data.forEach(item => {
+				if ((item.currentStatus == "New") || (item.currentStatus == "Draft")){
                 let table = document.getElementById("projectTable");
 
                 let row = table.insertRow(counter);
@@ -89,6 +90,7 @@ function updateTable() {
                 row.addEventListener("click", () => selectRow(row));
 
                 counter++;
+				}
             });
         })
         .catch((err) => {
