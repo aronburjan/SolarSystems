@@ -184,3 +184,29 @@ function addComponentsToProject() {
 	//call updateComponentTable to reset inputs --this is not optimal but makes ui more understandable
 	updateComponentTable();
 }
+
+async function listComponents(){
+	output = document.getElementById("componentList");
+	//display assigned components name + amount
+	projectID = document.getElementById("selectedRow").innerHTML;
+	if (projectID == null){
+		output.innerHTML = "Please select a project!";
+	} else {
+		output.innerHTML += "Assigned components for project " + projectID + ": <br>";
+		try {
+			const response = await fetch("https://localhost:7032/api/projectComponents/" + projectID);
+			const projectComponents = await response.json();
+
+			for (const projectComponent of projectComponents) {
+				const componentID = projectComponent.componentId;
+				const componentResponse = await fetch("https://localhost:7032/api/components/" + componentID);
+				const component = await componentResponse.json();
+
+				output.innerHTML += "(" + componentID + ") " +  component.componentName + " x " + projectComponent.quantity + " <br>";
+				
+			}
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	}
+}
