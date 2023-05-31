@@ -1,15 +1,58 @@
-table{
-	border: 1px solid black;
+/* Global styles */
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
 }
 
-.selected{
-	background-color: yellow;
+h1 {
+	text-align: center;
+	margin-top: 20px;
 }
 
-tr:not(.selected):nth-child(even) {
-  background-color: #f2f2f2;
+/* Table styles */
+table {
+	border-collapse: collapse;
+	width: 100%;
+	margin-bottom: 20px;
 }
 
-tr:not(.selected):nth-child(odd) {
-  background-color: #fff;
+th,
+td {
+	text-align: left;
+	padding: 8px;
+}
+
+th {
+	background-color: #4CAF50;
+	color: white;
+}
+
+tbody tr:not(.selected):nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+tbody tr:not(.selected):nth-child(odd) {
+	background-color: #fff;
+}
+
+/* Button styles */
+button {
+	background-color: #4CAF50;
+	color: white;
+	padding: 14px 20px;
+	margin: 8px 0;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	width: auto;
+}
+
+	button:hover {
+		background-color: #45a049;
+	}
+
+/* Route display styles */
+#routeDisplay {
+	margin-top: 20px;
 }
